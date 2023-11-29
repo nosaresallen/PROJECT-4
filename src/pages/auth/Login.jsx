@@ -10,11 +10,13 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
+import { IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import { Link as RouterLink, useNavigate} from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -22,32 +24,31 @@ import firebaseApp from "../firebaseConfig";
 import { useState} from 'react';
 
 function Login() {
-
+    
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
     const navigate = useNavigate();
 
     const handleLogin = () => {
-
         if (email !== '' && password !== '' ){
             const auth = getAuth(firebaseApp);
             signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-            // Signed in 
-            const user = userCredential.user;
-            navigate('/')
-        })
-        .catch((error) => {
-            alert('error');
-            const errorCode = error.code;
-            const errorMessage = error.message;
-        });
-        }else{
-            alert('Incorrect credentials')
+                .then(() => {
+                    navigate('/')
+                })
+                .catch((error) => {
+                    alert('Error: ' + error.message);
+                });
+        } else {
+                    alert('Incorrect credentials')
         }
         
     }
+
+    const [showPassword, setShowPassword] = useState(false);
+    const handlePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     const defaultTheme = createTheme();
     return (
@@ -88,11 +89,20 @@ function Login() {
                 required
                 fullWidth
                 id="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 label="Password"
                 name="password"
                 onChange={(e)=>setPassword(e.target.value)}
                 value={password}
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton onClick={handlePasswordVisibility} edge="end">
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                }}
                 // autoComplete="current-password"
                 />
                 {/* <FormControlLabel
@@ -100,12 +110,12 @@ function Login() {
                 label="Remember me"
                 /> */}
                 <Button
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2, bgcolor: grey[900]}}
-                onClick={()=>handleLogin()}
-                >
-                Login
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, bgcolor: grey[900]}}
+                    onClick={()=>handleLogin()}
+                    >
+                    Login
                 </Button>
                 <Grid container justifyContent="flex-end">
                 <Grid item>

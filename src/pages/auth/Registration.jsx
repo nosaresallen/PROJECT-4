@@ -3,8 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -13,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
+import { IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import firebaseApp from "../firebaseConfig";
@@ -34,13 +34,13 @@ export default function Registration() {
         if (email !== '' && password !== '' && confirmPassword !== '' && password === confirmPassword ){
             const auth = getAuth(firebaseApp);
             createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
+                .then(() => {
                     // Signed up 
-                    const user = userCredential.user;
+                    // const user = userCredential.user;
                     alert('Registeration Successful');
                     navigate('/login')
                 })
-                .catch((error) => {
+                .catch(() => {
                     alert('Registeration Failed');
                     // ..
                 });
@@ -50,14 +50,20 @@ export default function Registration() {
         
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-        email: data.get('email'),
-        password: data.get('password'),
-        });
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handlePasswordVisibility = () => {
+        setShowPassword(!showPassword);
     };
+
+    // const handleSubmit = (event) => {
+    //     event.preventDefault();
+    //     const data = new FormData(event.currentTarget);
+    //     console.log({
+    //     email: data.get('email'),
+    //     password: data.get('password'),
+    //     });
+    // };
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -96,10 +102,19 @@ export default function Registration() {
                     fullWidth
                     name="password"
                     label="Password"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     id="password"
                     onChange={(e)=>setPassword(e.target.value)}
                     value={password}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton onClick={handlePasswordVisibility} edge="end">
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -108,10 +123,19 @@ export default function Registration() {
                     fullWidth
                     name="confirmPassword"
                     label="Confirm password"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     id="confirmPassword"
                     onChange={(e)=>setConfirmPassword(e.target.value)}
                     value={confirmPassword}
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton onClick={handlePasswordVisibility} edge="end">
+                                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
                     />
                 </Grid>
                 </Grid>

@@ -1,4 +1,3 @@
-// import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -20,12 +19,13 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import Tooltip from '@mui/material/Tooltip';
-import { grey, red } from '@mui/material/colors';
+import { grey } from '@mui/material/colors';
+
+
 
 import { Link as RouterLink, Outlet, useNavigate } from "react-router-dom";
-import { NoEncryption } from '@mui/icons-material';
-import Login from './auth/Login';
-import { getAuth, onAuthStateChanged  } from "firebase/auth";
+import CreateAccount from './CreateAccount';
+import { getAuth, onAuthStateChanged, signOut  } from "firebase/auth";
 import { useState, useEffect} from 'react';
 import firebaseApp from "./firebaseConfig";
 
@@ -96,9 +96,27 @@ const openedMixin = (theme) => ({
     }),
     );
 
-    export default function Layout() {
+    
+
+function Layout() {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
+    const [authenticated, setAuthenticated] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const auth = getAuth(firebaseApp);
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setAuthenticated(true);
+            } else {
+                setAuthenticated(false);
+                navigate('/login');
+            }
+        });
+
+        return () => unsubscribe();
+    }, [navigate]);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -108,32 +126,17 @@ const openedMixin = (theme) => ({
         setOpen(false);
     };
 
-
-// dito ko siya iconditional rendering at gawa kaya ako ng ibang component ?
-    // CREATE AKO COMPIONENT NA MAGRIRIDIRECT SA LOGIN
-    // const createAccount = () => {
-    //     <Typography variant="h5" >
-    //             CREATE AN ACCOUNT!!!
-    //             <Login/>
-    //     </Typography>
-    // }
-
-    const [authenticated, setAuthenticated] = useState(false);
-    // const navigate = useNavigate();
-
-    useEffect(()=>{
+    const handleLogout = () => {
         const auth = getAuth(firebaseApp);
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                const uid = user.uid;
-                
-                setAuthenticated(true)
-                // navigate('/')
-            }
-        });
-
-    },[])
+        signOut(auth)
+            .then(() => {
+                setAuthenticated(false);
+                navigate('/login');
+            })
+            .catch((error) => {
+                console.log('Error during logout:', error);
+            });
+    };
 
 
     if(authenticated){
@@ -235,7 +238,7 @@ const openedMixin = (theme) => ({
                             
                         </RouterLink>
                         <Divider sx={{color: '#f5f5f5'}} />
-                        <RouterLink to="/login" style={{ textDecoration: 'none' }}> 
+                        <RouterLink onClick={handleLogout} style={{ textDecoration: 'none' }}> 
                             <ListItemButton 
                                 sx={{
                                 minHeight: 48,
@@ -280,7 +283,7 @@ const openedMixin = (theme) => ({
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
                 <section>
-                    <Outlet auth={authenticated} sx={{
+                    <Outlet sx={{
                         marginTop: 8,
                         display: 'flex',
                         flexDirection: 'column',
@@ -292,9 +295,11 @@ const openedMixin = (theme) => ({
         );
     }else{
         return(
-            <Login/>
+            <CreateAccount/>
         )
     }
 
     
 }
+
+export default Layout
