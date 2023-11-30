@@ -11,7 +11,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
 import SampleDisplay from './SampleDisplay';
-import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, updateDoc, doc } from "firebase/firestore";
+import { getFirestore, collection, onSnapshot, addDoc, deleteDoc,  doc } from "firebase/firestore";
 import firebassApp from './firebaseConfig';
 const defaultTheme = createTheme();
 
@@ -44,14 +44,15 @@ export default function SignUp() {
         const db = getFirestore(firebassApp);
     
         try {
-            const savedEmployeeList = ([]);
-            // const savedEmployeeList = db.collection('employees');
             onSnapshot(collection(db, 'employees'), snapshot => {
+                const newEmployeeList = [];
                 snapshot.forEach(employee => {
-                    savedEmployeeList.push(employee.data());
+                    const tempEmployee = employee.data();
+                    tempEmployee["employee_id"] = employee.id;
+                    newEmployeeList.push(tempEmployee);
 
                 });
-                setEmployeeList( savedEmployeeList)
+                setEmployeeList( newEmployeeList)
                 
             });
         }catch(e){
@@ -70,7 +71,7 @@ export default function SignUp() {
     const addEmployee = () => {
         
         const db = getFirestore(firebassApp);
-
+        // if(employee.firstname === '' || employee.lastname === '' || employee.grade === '')
         setEmployeeList(
             employeeList => [
                 ...employeeList, employee
@@ -94,15 +95,20 @@ export default function SignUp() {
     }
     // ======================================= DELETE DATA TO FIRESTORE=======================================
     
-    const deleteEmployee = (employeeID, firstname, lastname, address, contact, gender, email, position, hiredate) => {
-        
+    const deleteEmployee = (employeeID) => {
         const db = getFirestore(firebassApp);
-        confirm(`Are you sure you want to delete ${firstname} ${lastname}?`).then(
-            deleteDoc(doc(db, 'students', employeeID))
-        )
-
-        
-    }
+        const confirmation = window.confirm(`Are you sure you want to delete?`);
+        if (confirmation) {
+            deleteDoc(doc(db, 'employees', employeeID))
+                .then(() => {
+                    // Handle success or any other actions after deletion
+                })
+                .catch((error) => {
+                    // Handle error if deletion fails
+                    console.error("Error deleting document: ", error);
+                });
+        }
+    };
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -310,7 +316,7 @@ export default function SignUp() {
                             position = {employeeRecord.position}
                             hiredate = {employeeRecord.hiredate}
                             deleteEmployee = {deleteEmployee}
-                            employeeID={employeeRecord.student_id}
+                            employeeID={employeeRecord.employee_id}
                         />
                     ))
                 }

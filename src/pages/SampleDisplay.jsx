@@ -5,10 +5,10 @@ function SampleDisplay({firstname, lastname, address, contact, gender, email, po
         
         <div>
             <p>{firstname} {lastname} {address} {contact} {gender} {email} {position} {hiredate}</p>
-            <button>edit</button>
+            <button>Edit</button>
             <button onClick={()=>{
                 deleteEmployee(employeeID, firstname, lastname)
-            }}>delete</button>
+            }}>Delete</button>
         </div>
     )
 }
