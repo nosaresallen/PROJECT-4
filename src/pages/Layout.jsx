@@ -26,8 +26,9 @@ import { grey } from '@mui/material/colors';
 import { Link as RouterLink, Outlet, useNavigate } from "react-router-dom";
 import CreateAccount from './CreateAccount';
 import { getAuth, onAuthStateChanged, signOut  } from "firebase/auth";
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import firebaseApp from "./firebaseConfig";
+
 
 const drawerWidth = 240;
 
@@ -113,7 +114,7 @@ function Layout() {
                 setAuthenticated(false);
                 navigate('/login');
             }
-        });
+        },[]);
 
         return () => unsubscribe();
     }, [navigate]);
@@ -131,12 +132,15 @@ function Layout() {
         signOut(auth)
             .then(() => {
                 setAuthenticated(false);
+                                
                 navigate('/login');
             })
             .catch((error) => {
                 console.log('Error during logout:', error);
             });
     };
+
+    
 
 
     if(authenticated){
@@ -289,6 +293,9 @@ function Layout() {
                         flexDirection: 'column',
                         alignItems: 'center',
                 }}></Outlet>
+
+                
+                
                 </section>
             </Box>
             </Box>

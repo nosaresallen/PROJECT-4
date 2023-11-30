@@ -26,8 +26,7 @@ function App() {
     {
       setUser(user);
     });
-
-    // Cleaning up the subscription when the component unmounts
+    
     return () => unsubscribe();
   }, [auth]);
 
@@ -42,6 +41,7 @@ function App() {
               <Route path='addemployee' element={<AddEmployee/>}/>
             </Route>
             <Route>
+            <Route path='createaccount' element={<CreateAccount/>}/>
               <Route path='login' element={<Login/>}/>
               <Route path='register' element={<Registration/>}/>
               <Route path='*' element={<NotFound/>}/>
