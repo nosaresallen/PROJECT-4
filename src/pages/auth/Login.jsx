@@ -115,8 +115,8 @@ function Login() {
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link href='/register' variant="body2">
-                                    {"Don't have an account? Register here."}
+                            <Link href='/register' variant="body2">
+                                Already have an account? Login here.
                                 </Link>
                             </Grid>
                         </Grid>
