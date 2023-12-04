@@ -10,12 +10,13 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
-import SampleDisplay from './SampleDisplay';
+import EmployeeList from './EmployeeList';
+// import SampleDisplay from './SampleDisplay';
 import { getFirestore, collection, onSnapshot, addDoc, deleteDoc,  doc } from "firebase/firestore";
 import firebassApp from './firebaseConfig';
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+export default function AddEmployee() {
     // const handleSubmit = (event) => {
     //     event.preventDefault();
     //     const data = new FormData(event.currentTarget);
@@ -66,6 +67,7 @@ export default function SignUp() {
 
     }, [])
 
+
     // ======================================= ADD DATA TO FIRESTORE=======================================
     
     const addEmployee = () => {
@@ -95,20 +97,22 @@ export default function SignUp() {
     }
     // ======================================= DELETE DATA TO FIRESTORE=======================================
     
-    const deleteEmployee = (employeeID) => {
-        const db = getFirestore(firebassApp);
-        const confirmation = window.confirm(`Are you sure you want to delete?`);
-        if (confirmation) {
-            deleteDoc(doc(db, 'employees', employeeID))
-                .then(() => {
-                    // Handle success or any other actions after deletion
-                })
-                .catch((error) => {
-                    // Handle error if deletion fails
-                    console.error("Error deleting document: ", error);
-                });
+    const deleteEmployee = async (employeeID) => {
+    const db = getFirestore(firebassApp);
+    const confirmation = window.confirm(`Are you sure you want to delete?`);
+    
+    if (confirmation) {
+        try {
+            await deleteDoc(doc(db, 'employees', employeeID));
+
+            // After successful deletion from Firestore, refresh the employeeList
+            const updatedList = employeeList.filter((employee) => employee.employee_id !== employeeID);
+            setEmployeeList(updatedList);
+        } catch (error) {
+            console.error("Error deleting document: ", error);
         }
-    };
+    }
+};
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -303,7 +307,7 @@ export default function SignUp() {
                 >
                 Add employee
                 </Button>
-                {
+                {/* {
                     employeeList.map((employeeRecord)=>(
                         <SampleDisplay
                             key={employeeRecord.id}
@@ -319,7 +323,8 @@ export default function SignUp() {
                             employeeID={employeeRecord.employee_id}
                         />
                     ))
-                }
+                } */}
+                
                 
             </Box>
             </Box>

@@ -41,7 +41,7 @@ const openedMixin = (theme) => ({
     overflowX: 'hidden',
     });
 
-    const closedMixin = (theme) => ({
+const closedMixin = (theme) => ({
     transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -53,7 +53,7 @@ const openedMixin = (theme) => ({
     },
     });
 
-    const DrawerHeader = styled('div')(({ theme }) => ({
+const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -62,7 +62,7 @@ const openedMixin = (theme) => ({
     ...theme.mixins.toolbar,
     }));
 
-    const AppBar = styled(MuiAppBar, {
+const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
     })(({ theme, open }) => ({
     zIndex: theme.zIndex.drawer + 1,
@@ -80,7 +80,7 @@ const openedMixin = (theme) => ({
     }),
     }));
 
-    const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
         width: drawerWidth,
         flexShrink: 0,
@@ -127,12 +127,13 @@ function Layout() {
         setOpen(false);
     };
 
+    //Function to logout from dashboard
     const handleLogout = () => {
         const auth = getAuth(firebaseApp);
         signOut(auth)
             .then(() => {
                 setAuthenticated(false);
-                                
+                confirm('Are you sure you want to logout?');
                 navigate('/login');
             })
             .catch((error) => {
@@ -280,7 +281,7 @@ function Layout() {
     
                 <Divider />
         <Typography variant="body2" align="center" sx={{ opacity: open ? 1 : 0, py: 2, bgcolor: '#212121', color: '#f5f5f5' }}>
-            Developed by <strong>Allen</strong>
+            Developed by <strong>Allen</strong> @ <strong>BASE-404</strong>
         </Typography>
             </Drawer>
             
