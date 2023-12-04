@@ -22,7 +22,6 @@ import { useState } from 'react';
 const defaultTheme = createTheme();
 
 export default function Registration() {
-    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -85,18 +84,6 @@ export default function Registration() {
             </Typography>
             <Box component="form" noValidate sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <TextField
-                    required
-                    fullWidth
-                    id="username"
-                    label="@Username"
-                    name="username"
-                    onChange={(e)=>setUsername(e.target.value)}
-                    value={username}
-                    
-                    />
-                </Grid>
                 <Grid item xs={12}>
                     <TextField
                     required
