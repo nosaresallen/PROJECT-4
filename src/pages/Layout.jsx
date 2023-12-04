@@ -165,6 +165,7 @@ function Layout() {
                 <Typography variant="h5" noWrap component="div" >
                     EMPLOYEE MANAGEMENT DASHBOARD
                 </Typography>
+                
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open} sx={{'& .MuiDrawer-paper': {backgroundColor: '#212121', },}}>
@@ -173,6 +174,11 @@ function Layout() {
                     {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon sx={{color: '#f5f5f5'}}/>}
                 </IconButton>
                 </DrawerHeader>
+                <Divider />
+                <Typography variant="body2" align="center" sx={{ opacity: open ? 1 : 0, py: 2, bgcolor: '#212121', color: '#f5f5f5' }}>
+                    Hello, Allen!
+                </Typography>
+                
                 <Divider />
                 <List sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }} >
                     <ListItem disablePadding sx={{ display: 'block' }}>

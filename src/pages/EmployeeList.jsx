@@ -73,7 +73,7 @@ import TextField from '@mui/material/TextField';
 import { PieChart } from '@mui/x-charts';
 
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getFirestore, collection, onSnapshot, deleteDoc, doc } from 'firebase/firestore';
 import firebassApp from './firebaseConfig';
 import { grey } from '@mui/material/colors';
@@ -178,29 +178,30 @@ const EmployeeList = () => {
                 <Table aria-label="employee table">
                 <TableHead style={{ position: 'sticky', top: 0, background: grey[500], color: 'white', zIndex: 1 }}>
                     <TableRow >
-                        <TableCell style={{ fontWeight: 'bold' }}>First Name</TableCell>
-                        <TableCell style={{ fontWeight: 'bold' }}>Last Name</TableCell>
-                        <TableCell style={{ fontWeight: 'bold' }}>Email</TableCell>
-                        <TableCell style={{ fontWeight: 'bold' }}>Position</TableCell>
-                        <TableCell>Action</TableCell>
+                        <TableCell style={{ fontWeight: 'bold', textAlign: 'center' }}>First Name</TableCell>
+                        <TableCell style={{ fontWeight: 'bold', textAlign: 'center' }}>Last Name</TableCell>
+                        <TableCell style={{ fontWeight: 'bold', textAlign: 'center' }}>Email</TableCell>
+                        <TableCell style={{ fontWeight: 'bold', textAlign: 'center' }}>Position</TableCell>
+                        <TableCell style={{ fontWeight: 'bold', textAlign: 'center' }}>Action</TableCell>
                 </TableRow>
                 </TableHead>
                 <TableBody>
                     {employeeList.length > 0 ? (
                     filteredEmployees.map((employee) => (
                         <TableRow key={employee.employee_id}>
-                            <TableCell>{employee.firstname}</TableCell>
-                            <TableCell>{employee.lastname}</TableCell>
-                            <TableCell>{employee.email}</TableCell>
-                            <TableCell>{employee.position}</TableCell>
+                            <TableCell style={{ textAlign: 'center' }}>{employee.firstname}</TableCell>
+                            <TableCell style={{ textAlign: 'center' }}>{employee.lastname}</TableCell>
+                            <TableCell style={{ textAlign: 'center' }}>{employee.email}</TableCell>
+                            <TableCell style={{ textAlign: 'center' }}>{employee.position}</TableCell>
                             {/* <TableCell></TableCell> */}
-                        <TableCell>
-                            <IconButton
+                        <TableCell style={{ textAlign: 'center' }}>
+                            <IconButton  
                             aria-label="delete"
                             onClick={() => deleteEmployee(employee.employee_id)}
                             >
                             <DeleteIcon />
                             </IconButton>
+                            
                         </TableCell>
                         </TableRow>
                     ))

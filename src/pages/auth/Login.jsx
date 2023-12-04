@@ -1,8 +1,4 @@
 
-// import { BrowserRouter, Routes, Route } from 'react-router-dom';
-// import { Link } from 'react-router-dom';
-// import Login from './auth/Login';
-
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';

@@ -10,14 +10,19 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
-import EmployeeList from './EmployeeList';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
+
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 // import SampleDisplay from './SampleDisplay';
-import { getFirestore, collection, onSnapshot, addDoc, deleteDoc,  doc } from "firebase/firestore";
+import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc } from "firebase/firestore";
 import firebassApp from './firebaseConfig';
 const defaultTheme = createTheme();
 
@@ -110,22 +115,22 @@ export default function AddEmployee() {
     }
     // ======================================= DELETE DATA TO FIRESTORE=======================================
     
-    const deleteEmployee = async (employeeID) => {
-    const db = getFirestore(firebassApp);
-    const confirmation = window.confirm(`Are you sure you want to delete?`);
+//     const deleteEmployee = async (employeeID) => {
+//     const db = getFirestore(firebassApp);
+//     const confirmation = window.confirm(`Are you sure you want to delete?`);
     
-    if (confirmation) {
-        try {
-            await deleteDoc(doc(db, 'employees', employeeID));
+//     if (confirmation) {
+//         try {
+//             await deleteDoc(doc(db, 'employees', employeeID));
 
-            // After successful deletion from Firestore, refresh the employeeList
-            const updatedList = employeeList.filter((employee) => employee.employee_id !== employeeID);
-            setEmployeeList(updatedList);
-        } catch (error) {
-            console.error("Error deleting document: ", error);
-        }
-    }
-};
+//             // After successful deletion from Firestore, refresh the employeeList
+//             const updatedList = employeeList.filter((employee) => employee.employee_id !== employeeID);
+//             setEmployeeList(updatedList);
+//         } catch (error) {
+//             console.error("Error deleting document: ", error);
+//         }
+//     }
+// };
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -262,7 +267,7 @@ export default function AddEmployee() {
                     value={employee.email}
                     />
                 </Grid>
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                     <TextField
                     required
                     fullWidth
@@ -278,7 +283,40 @@ export default function AddEmployee() {
                     })}
                     value={employee.position}
                     />
+                </Grid> */}
+                <Grid item xs={12}>
+                <FormControl fullWidth>
+                <InputLabel id="position">Position*</InputLabel>
+                    <Select
+                    
+                    required
+                    fullWidth
+                    name="position"
+                    
+                    type="position"
+                    labelId="position"
+                    id="position"
+                    variant='filled'
+                    size="small"
+                    label="Position"
+                    onChange={(e)=>setEmployee({
+                        ...employee,
+                        position: e.target.value
+                    })}
+                    
+                    value={employee.position}
+                    
+                    >
+                        <MenuItem value={'Project Manager'}>Project Manager</MenuItem>
+                        <MenuItem value={'Software Engineer'}>Software Engineer</MenuItem>
+                        <MenuItem value={'UI/UX Designer'}>UI/UX Designer</MenuItem>
+                        <MenuItem value={'Front End Developer'}>Front End Developer</MenuItem>
+                        <MenuItem value={'Back End Developer'}>Back End Developer</MenuItem>
+                    </Select>
+                    </FormControl>
                 </Grid>
+
+
                 
                 {/* <Grid item xs={12}>
                     <TextField
