@@ -34,8 +34,6 @@ export default function Registration() {
             const auth = getAuth(firebaseApp);
             createUserWithEmailAndPassword(auth, email, password)
                 .then(() => {
-                    // Signed up 
-                    // const user = userCredential.user;
                     alert('Registeration Successful');
                     navigate('/login')
                 })
@@ -54,15 +52,6 @@ export default function Registration() {
     const handlePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
-
-    // const handleSubmit = (event) => {
-    //     event.preventDefault();
-    //     const data = new FormData(event.currentTarget);
-    //     console.log({
-    //     email: data.get('email'),
-    //     password: data.get('password'),
-    //     });
-    // };
 
     return (
         <ThemeProvider theme={defaultTheme}>
