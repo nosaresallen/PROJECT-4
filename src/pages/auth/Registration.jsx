@@ -3,7 +3,8 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+// import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
@@ -16,7 +17,6 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import firebaseApp from "../firebaseConfig";
-import {useNavigate} from "react-router-dom";
 import { useState } from 'react';
 
 const defaultTheme = createTheme();
@@ -137,9 +137,9 @@ export default function Registration() {
                 </Button>
                 <Grid container justifyContent="flex-end">
                 <Grid item>
-                    <Link href='/login' variant="body2">
+                    <RouterLink to='/login' variant="body2">
                     Already have an account? Login here.
-                    </Link>
+                    </RouterLink>
                 </Grid>
                 </Grid>
             </Box>
