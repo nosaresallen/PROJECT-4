@@ -11,12 +11,23 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
 import EmployeeList from './EmployeeList';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
 // import SampleDisplay from './SampleDisplay';
 import { getFirestore, collection, onSnapshot, addDoc, deleteDoc,  doc } from "firebase/firestore";
 import firebassApp from './firebaseConfig';
 const defaultTheme = createTheme();
 
 export default function AddEmployee() {
+
+    const [open, setOpen] = useState(false);
+
+    const handleClose = () => {
+        setOpen(false);
+    };
     // const handleSubmit = (event) => {
     //     event.preventDefault();
     //     const data = new FormData(event.currentTarget);
@@ -92,6 +103,8 @@ export default function AddEmployee() {
             position: '',
             hiredate: '',
         });
+
+        setOpen(true);
 
         
     }
@@ -296,6 +309,7 @@ export default function AddEmployee() {
                     })}
                     value={employee.hiredate}
                     />
+                    
                 </Grid>
                 
                 </Grid>
@@ -303,28 +317,24 @@ export default function AddEmployee() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2, bgcolor: grey[900] }}
+                
                 onClick={()=>addEmployee()}
                 >
                 Add employee
                 </Button>
-                {/* {
-                    employeeList.map((employeeRecord)=>(
-                        <SampleDisplay
-                            key={employeeRecord.id}
-                            firstname = {employeeRecord.firstname}
-                            lastname = {employeeRecord.lastname}
-                            address = {employeeRecord.address}
-                            contact = {employeeRecord.contact}
-                            gender = {employeeRecord.gender}
-                            email = {employeeRecord.email}
-                            position = {employeeRecord.position}
-                            hiredate = {employeeRecord.hiredate}
-                            deleteEmployee = {deleteEmployee}
-                            employeeID={employeeRecord.employee_id}
-                        />
-                    ))
-                } */}
-                
+                <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+                    <DialogTitle>Successful!</DialogTitle>
+                    <DialogContent>
+                    <DialogContentText>
+                        Employee Added!
+                    </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        OK
+                    </Button>
+                    </DialogActions>
+            </Dialog>
                 
             </Box>
             </Box>

@@ -70,6 +70,8 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TextField from '@mui/material/TextField';
 
+import { PieChart } from '@mui/x-charts';
+
 
 import React, { useState, useEffect } from 'react';
 import { getFirestore, collection, onSnapshot, deleteDoc, doc } from 'firebase/firestore';
@@ -130,9 +132,40 @@ const EmployeeList = () => {
                 position.startsWith(searchText)
                 );
             });
+
+            // Calculate position distribution for the pie chart
+            const calculatePositionDistribution = () => {
+                const positionsCount = {};
+                employeeList.forEach((employee) => {
+                const position = employee.position;
+                if (positionsCount[position]) {
+                    positionsCount[position]++;
+                } else {
+                    positionsCount[position] = 1;
+                }
+                });
+                return positionsCount;
+            };
+
+            // Prepare data for the pie chart
+            const positionsCount = calculatePositionDistribution();
+            const pieChartData = Object.keys(positionsCount).map((position) => ({
+                id: position,
+                value: positionsCount[position],
+                label: position,
+            }));
     
         return (
             <div>
+                <PieChart
+                series={[
+                    {
+                    data: pieChartData,
+                    },
+                ]}
+                width={800}
+                height={250}
+                />
                 <TextField
                     label="Search Employee"
                     variant="outlined"
@@ -140,9 +173,10 @@ const EmployeeList = () => {
                     onChange={(e) => setFilterText(e.target.value)}
                     style={{ marginBottom: '20px' }}
                 />
+                
                 <TableContainer component={Paper} style={{ maxHeight: '300px' }}>
                 <Table aria-label="employee table">
-                <TableHead style={{ position: 'sticky', top: 0, background: grey[900], color: 'white', zIndex: 1 }}>
+                <TableHead style={{ position: 'sticky', top: 0, background: grey[500], color: 'white', zIndex: 1 }}>
                     <TableRow >
                         <TableCell style={{ fontWeight: 'bold' }}>First Name</TableCell>
                         <TableCell style={{ fontWeight: 'bold' }}>Last Name</TableCell>
