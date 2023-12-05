@@ -1,9 +1,7 @@
-
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-// import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -20,7 +18,6 @@ import firebaseApp from "../firebaseConfig";
 import { useState, useEffect } from 'react';
 
 function Login() {
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     let navigate = useNavigate();
@@ -87,8 +84,6 @@ function Login() {
                             name="email"
                             onChange={(e) => setEmail(e.target.value)}
                             value={email}
-                        // autoComplete="email"
-                        // autoFocus
                         />
                         <TextField
                             margin="normal"
@@ -109,12 +104,7 @@ function Login() {
                                     </InputAdornment>
                                 ),
                             }}
-                        // autoComplete="current-password"
                         />
-                        {/* <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-                /> */}
                         <Button
                             fullWidth
                             variant="contained"

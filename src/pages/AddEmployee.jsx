@@ -21,8 +21,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-// import SampleDisplay from './SampleDisplay';
-import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc } from "firebase/firestore";
+import { getFirestore, collection, onSnapshot, addDoc} from "firebase/firestore";
 import firebassApp from './firebaseConfig';
 const defaultTheme = createTheme();
 
@@ -33,14 +32,6 @@ export default function AddEmployee() {
     const handleClose = () => {
         setOpen(false);
     };
-    // const handleSubmit = (event) => {
-    //     event.preventDefault();
-    //     const data = new FormData(event.currentTarget);
-    //     console.log({
-    //     email: data.get('email'),
-    //     password: data.get('password'),
-    //     });
-    // };\
     
     const [employee, setEmployee] = useState({
         firstname: '',
@@ -74,12 +65,7 @@ export default function AddEmployee() {
             });
         }catch(e){
             alert('Could not fetch employee data');
-        }
-
-
-        
-
-        
+        } 
 
     }, [])
 
@@ -113,24 +99,6 @@ export default function AddEmployee() {
 
         
     }
-    // ======================================= DELETE DATA TO FIRESTORE=======================================
-    
-//     const deleteEmployee = async (employeeID) => {
-//     const db = getFirestore(firebassApp);
-//     const confirmation = window.confirm(`Are you sure you want to delete?`);
-    
-//     if (confirmation) {
-//         try {
-//             await deleteDoc(doc(db, 'employees', employeeID));
-
-//             // After successful deletion from Firestore, refresh the employeeList
-//             const updatedList = employeeList.filter((employee) => employee.employee_id !== employeeID);
-//             setEmployeeList(updatedList);
-//         } catch (error) {
-//             console.error("Error deleting document: ", error);
-//         }
-//     }
-// };
 
     return (
         <ThemeProvider theme={defaultTheme}>
