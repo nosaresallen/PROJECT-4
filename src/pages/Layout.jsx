@@ -21,10 +21,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import Tooltip from '@mui/material/Tooltip';
 import { grey } from '@mui/material/colors';
 
-
-
 import { Link as RouterLink, Outlet, useNavigate } from "react-router-dom";
-import CreateAccount from './CreateAccount';
 import { getAuth, onAuthStateChanged, signOut  } from "firebase/auth";
 import { useState, useEffect } from 'react';
 import firebaseApp from "./firebaseConfig";
@@ -102,14 +99,19 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 function Layout() {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
-    // const [authenticated, setAuthenticated] = useState(false);
+    const [userProfile, setUserProfile] = useState('');
+    const auth = getAuth(firebaseApp);
     let navigate = useNavigate();
 
     useEffect(() => {
-        const auth = getAuth(firebaseApp);
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                //do something
+                console.log(user);
+                setUserProfile({
+                    email: user.email,
+                    name: user.displayName
+                    
+                })
             } else {
                 navigate('/login');
             }
@@ -173,7 +175,7 @@ function Layout() {
             </DrawerHeader>
             <Divider />
             <Typography variant="body2" align="center" sx={{ opacity: open ? 1 : 0, py: 2, bgcolor: '#212121', color: '#f5f5f5' }}>
-                Hello, Allen!
+                Hello, {userProfile.name}
             </Typography>
             
             <Divider />

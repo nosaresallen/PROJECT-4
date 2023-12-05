@@ -14,21 +14,22 @@ import { grey } from '@mui/material/colors';
 import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile } from "firebase/auth";
 import firebaseApp from "../firebaseConfig";
 import { useState, useEffect } from 'react';
 
 const defaultTheme = createTheme();
 
 export default function Registration() {
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const auth = getAuth(firebaseApp);
 
     let navigate = useNavigate();
 
     useEffect(() => {
-        const auth = getAuth(firebaseApp);
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 navigate('/');
@@ -39,12 +40,19 @@ export default function Registration() {
 
     const handleRegister = () => {
 
-        if (email !== '' && password !== '' && confirmPassword !== '' && password === confirmPassword ){
-            const auth = getAuth(firebaseApp);
-            createUserWithEmailAndPassword(auth, email, password)
-                .then(() => {
-                    alert('Registeration Successful');
-                    navigate('/login')
+        if (
+            name !== '' && 
+            email !== '' && 
+            password !== '' && 
+            confirmPassword !== '' && 
+            password === confirmPassword 
+            ){
+            createUserWithEmailAndPassword(auth, email, password).then(
+                (useCredentials) => {
+                    const user = useCredentials.user;
+                    updateProfile(auth.currentUser,{
+                        displayName: name
+                    })
                 })
                 .catch(() => {
                     alert('Registeration Failed');
@@ -82,6 +90,17 @@ export default function Registration() {
             </Typography>
             <Box component="form" noValidate sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <TextField
+                    required
+                    fullWidth
+                    id="name"
+                    label="Name"
+                    name="name"
+                    onChange={(e)=>setName(e.target.value)}
+                    value={name}
+                    />
+                </Grid>
                 <Grid item xs={12}>
                     <TextField
                     required
