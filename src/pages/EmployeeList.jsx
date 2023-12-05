@@ -174,15 +174,15 @@ const EmployeeList = () => {
                     style={{ marginBottom: '20px' }}
                 />
                 
-                <TableContainer component={Paper} style={{ maxHeight: '300px' }}>
+                <TableContainer component={Paper} style={{ overflowX: 'auto', maxHeight: '400px' }}>
                 <Table aria-label="employee table">
                 <TableHead style={{ position: 'sticky', top: 0, background: grey[500], color: 'white', zIndex: 1 }}>
                     <TableRow >
-                        <TableCell style={{ fontWeight: 'bold', textAlign: 'center' }}>First Name</TableCell>
-                        <TableCell style={{ fontWeight: 'bold', textAlign: 'center' }}>Last Name</TableCell>
-                        <TableCell style={{ fontWeight: 'bold', textAlign: 'center' }}>Email</TableCell>
-                        <TableCell style={{ fontWeight: 'bold', textAlign: 'center' }}>Position</TableCell>
-                        <TableCell style={{ fontWeight: 'bold', textAlign: 'center' }}>Action</TableCell>
+                        <TableCell style={{ width: '20%',fontWeight: 'bold', textAlign: 'center' }}>First Name</TableCell>
+                        <TableCell style={{ width: '20%',fontWeight: 'bold', textAlign: 'center' }}>Last Name</TableCell>
+                        <TableCell style={{ width: '20%',fontWeight: 'bold', textAlign: 'center' }}>Email</TableCell>
+                        <TableCell style={{ width: '20%',fontWeight: 'bold', textAlign: 'center' }}>Position</TableCell>
+                        <TableCell style={{ width: '20%',fontWeight: 'bold', textAlign: 'center' }}>Action</TableCell>
                 </TableRow>
                 </TableHead>
                 <TableBody>
