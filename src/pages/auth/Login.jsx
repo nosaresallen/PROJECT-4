@@ -15,15 +15,25 @@ import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import firebaseApp from "../firebaseConfig";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function Login() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
+    let navigate = useNavigate();
+
+    useEffect(() => {
+        const auth = getAuth(firebaseApp);
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                navigate('/');
+            }
+        });
+
+    },[]);
 
     const handleLogin = () => {
         if (email !== '' && password !== '') {

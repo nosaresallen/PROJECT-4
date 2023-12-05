@@ -102,22 +102,20 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 function Layout() {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
-    const [authenticated, setAuthenticated] = useState(false);
-    const navigate = useNavigate();
+    // const [authenticated, setAuthenticated] = useState(false);
+    let navigate = useNavigate();
 
     useEffect(() => {
         const auth = getAuth(firebaseApp);
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, (user) => {
             if (user) {
-                setAuthenticated(true);
+                //do something
             } else {
-                setAuthenticated(false);
                 navigate('/login');
             }
-        },[]);
+        });
 
-        return () => unsubscribe();
-    }, [navigate]);
+    },[]);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -132,188 +130,181 @@ function Layout() {
         const auth = getAuth(firebaseApp);
         signOut(auth)
             .then(() => {
-                setAuthenticated(false);
                 confirm('Are you sure you want to logout?');
                 navigate('/login');
             })
             .catch((error) => {
                 console.log('Error during logout:', error);
             });
+        
     };
 
     
 
 
-    if(authenticated){
-        return (
-            <Box sx={{ display: 'flex' }} >
-            <CssBaseline />
-            <AppBar position="fixed" open={open} sx={{ bgcolor: grey[900] }}>
-                <Toolbar  >
-                <IconButton 
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={handleDrawerOpen}
-                    edge="start"
-                    sx={{
-                    marginRight: 5,
-                    ...(open && { display: 'none' }),
-                    }}
-                >
-                    <MenuIcon />
-                </IconButton>
-                <Typography variant="h5" noWrap component="div" >
-                    EMPLOYEE MANAGEMENT DASHBOARD
-                </Typography>
-                
-                </Toolbar>
-            </AppBar>
-            <Drawer variant="permanent" open={open} sx={{'& .MuiDrawer-paper': {backgroundColor: '#212121', },}}>
-                <DrawerHeader >
-                <IconButton onClick={handleDrawerClose}>
-                    {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon sx={{color: '#f5f5f5'}}/>}
-                </IconButton>
-                </DrawerHeader>
-                <Divider />
-                <Typography variant="body2" align="center" sx={{ opacity: open ? 1 : 0, py: 2, bgcolor: '#212121', color: '#f5f5f5' }}>
-                    Hello, Allen!
-                </Typography>
-                
-                <Divider />
-                <List sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }} >
-                    <ListItem disablePadding sx={{ display: 'block' }}>
-                        <RouterLink to="/" style={{ textDecoration: 'none' }}> 
-                            <ListItemButton 
-                                sx={{
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
-                                '&:hover': {
-                                    textDecoration: 'none',
-                                    color: 'black',
-                                },
-                                '&:active': {
-                                    textDecoration: 'none',
-                                    color: 'black', 
-                                },
-                                }}
-                            >
-                            <Tooltip title='Dashboard' placement='right'>
-                                <ListItemIcon
-                                sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                    color: '#f5f5f5',
-                                }}
-                                >
-                                { <DashboardIcon />}
-                                </ListItemIcon>
-                            </Tooltip>
-    
-                                <ListItemText  primary={['Dashboard']} sx={{ opacity: open ? 1 : 0, color: '#f5f5f5'}} />
-                            </ListItemButton>
-                        </RouterLink>
-                        <RouterLink to="/addemployee" style={{ textDecoration: 'none' }}> 
-                            <ListItemButton 
-                                sx={{
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
-                                '&:hover': {
-                                    textDecoration: 'none',
-                                    color: 'black',
-                                },
-                                '&:active': {
-                                    textDecoration: 'none',
-                                    color: 'black',
-                                },
-                                }}
-                            >
-                            <Tooltip title='Add Employee' placement='right'>
-                                <ListItemIcon
-                                sx={{
-                                    minWidth: 0,
-                                    mr: open ? 3 : 'auto',
-                                    justifyContent: 'center',
-                                    color: '#f5f5f5',
-                                }}
-                                >
-                                { <PersonAddAltIcon />}
-                                </ListItemIcon>
-                            </Tooltip>
-    
-                                <ListItemText  primary={['Add Employee']} sx={{ opacity: open ? 1 : 0, color: '#f5f5f5' }} />
-                            </ListItemButton>
-    
-                            
-                        </RouterLink>
-                        <Divider sx={{color: '#f5f5f5'}} />
-                        <RouterLink onClick={handleLogout} style={{ textDecoration: 'none' }}> 
-                            <ListItemButton 
-                                sx={{
-                                minHeight: 48,
-                                justifyContent: open ? 'initial' : 'center',
-                                px: 2.5,
-                                '&:hover': {
-                                    textDecoration: 'none',
-                                    color: 'black',
-                                },
-                                '&:active': {
-                                    textDecoration: 'none',
-                                    color: 'black',
-                                },
-                                }}
-                            >
-                                <Tooltip title='Logout' placement='right'>
-                                    <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                        color: '#f5f5f5',
-                                    }}
-                                    >
-                                    { <LogoutIcon />}
-                                    </ListItemIcon>
-                                </Tooltip>
-    
-                                <ListItemText  primary={['Logout']} sx={{ opacity: open ? 1 : 0, color: '#f5f5f5' }} />
-                            </ListItemButton>
-                        </RouterLink>
-    
-                    </ListItem>
-                </List>
-    
-                <Divider />
-        <Typography variant="body2" align="center" sx={{ opacity: open ? 1 : 0, py: 2, bgcolor: '#212121', color: '#f5f5f5' }}>
-            Developed by <strong>Allen</strong> @ <strong>BASE-404</strong>
-        </Typography>
-            </Drawer>
+    return (
+        <Box sx={{ display: 'flex' }} >
+        <CssBaseline />
+        <AppBar position="fixed" open={open} sx={{ bgcolor: grey[900] }}>
+            <Toolbar  >
+            <IconButton 
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={{
+                marginRight: 5,
+                ...(open && { display: 'none' }),
+                }}
+            >
+                <MenuIcon />
+            </IconButton>
+            <Typography variant="h5" noWrap component="div" >
+                EMPLOYEE MANAGEMENT DASHBOARD
+            </Typography>
             
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                <DrawerHeader />
-                <section>
-                    <Outlet sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                }}></Outlet>
+            </Toolbar>
+        </AppBar>
+        <Drawer variant="permanent" open={open} sx={{'& .MuiDrawer-paper': {backgroundColor: '#212121', },}}>
+            <DrawerHeader >
+            <IconButton onClick={handleDrawerClose}>
+                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon sx={{color: '#f5f5f5'}}/>}
+            </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <Typography variant="body2" align="center" sx={{ opacity: open ? 1 : 0, py: 2, bgcolor: '#212121', color: '#f5f5f5' }}>
+                Hello, Allen!
+            </Typography>
+            
+            <Divider />
+            <List sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }} >
+                <ListItem disablePadding sx={{ display: 'block' }}>
+                    <RouterLink to="/" style={{ textDecoration: 'none' }}> 
+                        <ListItemButton 
+                            sx={{
+                            minHeight: 48,
+                            justifyContent: open ? 'initial' : 'center',
+                            px: 2.5,
+                            '&:hover': {
+                                textDecoration: 'none',
+                                color: 'black',
+                            },
+                            '&:active': {
+                                textDecoration: 'none',
+                                color: 'black', 
+                            },
+                            }}
+                        >
+                        <Tooltip title='Dashboard' placement='right'>
+                            <ListItemIcon
+                            sx={{
+                                minWidth: 0,
+                                mr: open ? 3 : 'auto',
+                                justifyContent: 'center',
+                                color: '#f5f5f5',
+                            }}
+                            >
+                            { <DashboardIcon />}
+                            </ListItemIcon>
+                        </Tooltip>
 
-                
-                
-                </section>
-            </Box>
-            </Box>
-        );
-    }else{
-        return(
-            <CreateAccount/>
-        )
-    }
+                            <ListItemText  primary={['Dashboard']} sx={{ opacity: open ? 1 : 0, color: '#f5f5f5'}} />
+                        </ListItemButton>
+                    </RouterLink>
+                    <RouterLink to="/addemployee" style={{ textDecoration: 'none' }}> 
+                        <ListItemButton 
+                            sx={{
+                            minHeight: 48,
+                            justifyContent: open ? 'initial' : 'center',
+                            px: 2.5,
+                            '&:hover': {
+                                textDecoration: 'none',
+                                color: 'black',
+                            },
+                            '&:active': {
+                                textDecoration: 'none',
+                                color: 'black',
+                            },
+                            }}
+                        >
+                        <Tooltip title='Add Employee' placement='right'>
+                            <ListItemIcon
+                            sx={{
+                                minWidth: 0,
+                                mr: open ? 3 : 'auto',
+                                justifyContent: 'center',
+                                color: '#f5f5f5',
+                            }}
+                            >
+                            { <PersonAddAltIcon />}
+                            </ListItemIcon>
+                        </Tooltip>
 
-    
+                            <ListItemText  primary={['Add Employee']} sx={{ opacity: open ? 1 : 0, color: '#f5f5f5' }} />
+                        </ListItemButton>
+
+                        
+                    </RouterLink>
+                    <Divider sx={{color: '#f5f5f5'}} />
+                    <RouterLink onClick={handleLogout} style={{ textDecoration: 'none' }}> 
+                        <ListItemButton 
+                            sx={{
+                            minHeight: 48,
+                            justifyContent: open ? 'initial' : 'center',
+                            px: 2.5,
+                            '&:hover': {
+                                textDecoration: 'none',
+                                color: 'black',
+                            },
+                            '&:active': {
+                                textDecoration: 'none',
+                                color: 'black',
+                            },
+                            }}
+                        >
+                            <Tooltip title='Logout' placement='right'>
+                                <ListItemIcon
+                                sx={{
+                                    minWidth: 0,
+                                    mr: open ? 3 : 'auto',
+                                    justifyContent: 'center',
+                                    color: '#f5f5f5',
+                                }}
+                                >
+                                { <LogoutIcon />}
+                                </ListItemIcon>
+                            </Tooltip>
+
+                            <ListItemText  primary={['Logout']} sx={{ opacity: open ? 1 : 0, color: '#f5f5f5' }} />
+                        </ListItemButton>
+                    </RouterLink>
+
+                </ListItem>
+            </List>
+
+            <Divider />
+    <Typography variant="body2" align="center" sx={{ opacity: open ? 1 : 0, py: 2, bgcolor: '#212121', color: '#f5f5f5' }}>
+        Developed by <strong>Allen</strong> @ <strong>BASE-404</strong>
+    </Typography>
+        </Drawer>
+        
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+            <DrawerHeader />
+            <section>
+                <Outlet sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+            }}></Outlet>
+
+            
+            
+            </section>
+        </Box>
+        </Box>
+
+    )
 }
 
 export default Layout

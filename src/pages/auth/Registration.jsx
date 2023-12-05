@@ -15,9 +15,9 @@ import { grey } from '@mui/material/colors';
 import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import firebaseApp from "../firebaseConfig";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const defaultTheme = createTheme();
 
@@ -26,7 +26,17 @@ export default function Registration() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    const navigate = useNavigate();
+    let navigate = useNavigate();
+
+    useEffect(() => {
+        const auth = getAuth(firebaseApp);
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                navigate('/');
+            }
+        });
+
+    },[]);
 
     const handleRegister = () => {
 
