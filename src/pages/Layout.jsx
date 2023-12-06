@@ -174,8 +174,8 @@ function Layout() {
             </IconButton>
             </DrawerHeader>
             <Divider />
-            <Typography variant="body2" align="center" sx={{ opacity: open ? 1 : 0, py: 2, bgcolor: '#212121', color: '#f5f5f5' }}>
-                Hello, {userProfile.name}
+            <Typography variant="body1" align="center" sx={{ opacity: open ? 1 : 0, py: 2, bgcolor: '#212121', color: '#f5f5f5' }}>
+                Hello, {userProfile.name}   
             </Typography>
             
             <Divider />

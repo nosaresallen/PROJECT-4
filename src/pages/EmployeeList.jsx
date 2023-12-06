@@ -12,30 +12,31 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
+import {
+    Grid,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+} from '@mui/material';
+
+import { Button } from '@mui/material';
 
 import { PieChart } from '@mui/x-charts';
 
 
 import { useState, useEffect } from 'react';
-import { getFirestore, collection, onSnapshot, deleteDoc, doc } from 'firebase/firestore';
+import { getFirestore, collection, onSnapshot, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import firebassApp from './firebaseConfig';
-import { green, grey, red } from '@mui/material/colors';
+import { grey, red } from '@mui/material/colors';
 
 const EmployeeList = () => {
     const [employeeList, setEmployeeList] = useState([]);
     const [filterText, setFilterText] = useState('');
+    const [editableEmployee, setEditableEmployee] = useState(null);
+    const [isEditMode, setIsEditMode] = useState(false);
     const db = getFirestore(firebassApp);
-
-    // Inside your functional component (EmployeeList)
     const [openModals, setOpenModals] = useState({});
-
-    const handleCardEmployee = (employeeID) => {
-        // Update the state of the specific employee's modal to open
-        setOpenModals((prevOpenModals) => ({
-        ...prevOpenModals,
-        [employeeID]: true,
-    }));
-    }
 
     const handleCloseModal = (employeeID) => {
         // Update the state of the specific employee's modal to close
@@ -68,6 +69,7 @@ const EmployeeList = () => {
     }
     }, []);
     
+
     const deleteEmployee = async (employeeID) => {
             try {
             await deleteDoc(doc(db, 'employees', employeeID));
@@ -117,10 +119,37 @@ const EmployeeList = () => {
         label: position,
     }));
 
-    const handleEditEmployee = (employeeID) => {
-        alert('View me');
-        
-    }
+    const handleCardEmployee = (employeeID) => {
+        setOpenModals((prevOpenModals) => ({
+            ...prevOpenModals,
+            [employeeID]: true,
+        }));
+        // Fetch the specific employee data when the modal is opened for editing
+        const selectedEmployee = employeeList.find((employee) => employee.employee_id === employeeID);
+        setEditableEmployee(selectedEmployee);
+        setIsEditMode(false); // Reset to view mode initially
+    };
+
+    const handleEditEmployee = () => {
+        setIsEditMode(true); // Enable edit mode when "Edit" button is clicked
+    };
+
+    const handleSaveEmployee = async () => {
+        if (editableEmployee) {
+            try {
+                // Update the employee data using Firebase's updateDoc
+                const { employee_id, ...updatedEmployeeData } = editableEmployee;
+                await updateDoc(doc(db, 'employees', employee_id), updatedEmployeeData);
+
+                // Reset states after saving the changes
+                setEditableEmployee(null);
+                setIsEditMode(false);
+                handleCloseModal(employee_id); // Close the modal after saving
+            } catch (error) {
+                console.error('Error updating document: ', error);
+            }
+        }
+    };
 
     
     return (
@@ -161,7 +190,6 @@ const EmployeeList = () => {
                         <TableCell style={{ textAlign: 'center' }}>{employee.lastname}</TableCell>
                         <TableCell style={{ textAlign: 'center' }}>{employee.email}</TableCell>
                         <TableCell style={{ textAlign: 'center' }}>{employee.position}</TableCell>
-                        {/* <TableCell></TableCell> */}
                     <TableCell style={{ textAlign: 'center' }}>
                     <IconButton  sx={{ color: grey[600] }}
                         aria-label="view"
@@ -210,56 +238,167 @@ const EmployeeList = () => {
                 boxShadow: 24,
                 p: 4,
                 }}>
-                {/* Content of your modal */}
-                <Typography id="modal-modal-title" variant="h4" component="h2">
-                    <strong>Employee Information</strong>
-                </Typography>
-                <hr />
-                <Typography variant="body1">
-                    <strong>First name:</strong> {employee.firstname} 
-                    <TextField variant="standard" size="small"/>
-                </Typography>
-                <Typography variant="body1">
-                    <strong>Last name:</strong> {employee.lastname}
-                    <TextField variant="standard" size="small"/>
-                </Typography>
-                <Typography variant="body1">
-                    <strong>Address:</strong> {employee.address}
-                    
-                </Typography>
-                <Typography variant="body1">
-                    <strong>Contact:</strong> {employee.contact}
-                    <TextField variant="standard" size="small"/>
-                </Typography>
-                <Typography variant="body1">
-                    <strong>Gender:</strong> {employee.gender}
-                </Typography>
-                <Typography variant="body1">
-                    <strong>Email:</strong> <em>{employee.email}</em>
-                </Typography>
-                <Typography variant="body1">
-                    <strong>Position:</strong> {employee.position}
-                </Typography>
-                <Typography variant="body1">
-                    <strong>Hire Date</strong>: {employee.hiredate}
-                </Typography>
-                <Box onClick={() => handleEditEmployee(employee.employee_id)} sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-                    <button style={{ backgroundColor: 'green', color: 'white', borderRadius: '8px', border: 'none',
-                    padding: '10px 15px', }}>
-                        Edit
-                    </button>
-                </Box>
-            </Box>
-        </Modal>
-        )) 
-        ) : (
-            <Typography >
-                    No employees available
-            </Typography>
-        )}
+                {editableEmployee && (
+                                <div>
+                                    {isEditMode ? (
+                                        /* Display editable fields in edit mode */
+                                        <div>
+                                            
+                                            <TextField
+                                                label="First Name"
+                                                value={editableEmployee.firstname}
+                                                onChange={(e) => setEditableEmployee({ ...editableEmployee, firstname: e.target.value })}
+                                                variant="outlined"
+                                                fullWidth
+                                                sx={{ mb: 2 }}
+                                            />
+                                            
+                                            <TextField
+                                                label="Lastname"
+                                                value={editableEmployee.lastname}
+                                                onChange={(e) => setEditableEmployee({ ...editableEmployee, lastname: e.target.value })}
+                                                variant="outlined"
+                                                fullWidth
+                                                sx={{ mb: 2 }}
+                                            />
+
+                                            <TextField
+                                                label="Address"
+                                                value={editableEmployee.address}
+                                                onChange={(e) => setEditableEmployee({ ...editableEmployee, address: e.target.value })}
+                                                variant="outlined"
+                                                fullWidth
+                                                sx={{ mb: 2 }}
+                                            />
+
+                                            <TextField
+                                                label="Contact"
+                                                value={editableEmployee.contact}
+                                                onChange={(e) => setEditableEmployee({ ...editableEmployee, contact: e.target.value })}
+                                                variant="outlined"
+                                                fullWidth
+                                                sx={{ mb: 2 }}
+                                            />
+
+                                            <TextField
+                                                label="Gender"
+                                                value={editableEmployee.gender}
+                                                onChange={(e) => setEditableEmployee({ ...editableEmployee, gender: e.target.value })}
+                                                variant="outlined"
+                                                fullWidth
+                                                sx={{ mb: 2 }}
+                                            />
+
+                                            <TextField
+                                                label="Email"
+                                                value={editableEmployee.email}
+                                                onChange={(e) => setEditableEmployee({ ...editableEmployee, email: e.target.value })}
+                                                variant="outlined"
+                                                fullWidth
+                                                sx={{ mb: 2 }}
+                                            />
+
+                                            <Grid sx={{ mb: 2 }}>
+                                                <FormControl fullWidth >
+                                                    <InputLabel id="position">Position*</InputLabel>
+                                                    <Select
+                                                        required
+                                                        fullWidth
+                                                        name="position"
+                                                        type="position"
+                                                        labelId="position"
+                                                        id="position"
+                                                        variant='outlined'
+                                                        label="Position"
+                                                        onChange={(e) => setEditableEmployee({ ...editableEmployee, position: e.target.value })}
+                                                        value={editableEmployee.position}
+                                                                    
+                                                    >
+                                                        <MenuItem value={'Project Manager'}>Project Manager</MenuItem>
+                                                        <MenuItem value={'Software Engineer'}>Software Engineer</MenuItem>
+                                                        <MenuItem value={'UI/UX Designer'}>UI/UX Designer</MenuItem>
+                                                        <MenuItem value={'Front End Developer'}>Front End Developer</MenuItem>
+                                                        <MenuItem value={'Back End Developer'}>Back End Developer</MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                            </Grid>
+
+                                            <TextField
+                                                label="Hire Date"
+                                                value={editableEmployee.hiredate}
+                                                onChange={(e) => setEditableEmployee({ ...editableEmployee, hiredate: e.target.value })}
+                                                variant="outlined"
+                                                fullWidth
+                                                sx={{ mb: 2 }}
+                                            />
+
+                                            
+                                        </div>
+                                    ) : (
+                                        /* Display non-editable fields in view mode */
+                                        <div>
+                                            <Typography variant="h4" component="h4">
+                                                <strong>Employee Information</strong> 
+                                            </Typography>
+                                            <hr />
+                                            <Typography variant="body1">
+                                                <strong>First name:</strong> {editableEmployee.firstname}
+                                            </Typography>
+                                            <Typography variant="body1">
+                                                <strong>Last name:</strong> {editableEmployee.lastname}
+                                            </Typography>
+                                            <Typography variant="body1">
+                                                <strong>Address:</strong> {editableEmployee.address}
+                                            </Typography>
+                                            <Typography variant="body1">
+                                                <strong>Contact:</strong> {editableEmployee.contact}
+                                            </Typography>
+                                            <Typography variant="body1">
+                                                <strong>Gender:</strong> {editableEmployee.gender}
+                                            </Typography>
+                                            <Typography variant="body1">
+                                                <strong>Email:</strong> {editableEmployee.email}
+                                            </Typography>
+                                            <Typography variant="body1">
+                                                <strong>Position:</strong> {editableEmployee.position}
+                                            </Typography>
+                                            <Typography variant="body1">
+                                                <strong>Hire Date:</strong> {editableEmployee.hiredate}
+                                            </Typography>
+                                        </div>
+                                    )}
+                                    <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+                                        {isEditMode ? (
+                                            /* Show Save button in edit mode */
+                                            <Button
+                                                variant="contained"
+                                                color="success"
+                                                onClick={handleSaveEmployee}
+                                            >
+                                                Save
+                                            </Button>
+                                        ) : (
+                                            /* Show Edit button in view mode */
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={handleEditEmployee}
+                                            >
+                                                Edit
+                                            </Button>
+                                        )}
+                                    </Box>
+                                </div>
+                            )}
+                        </Box>
+                    </Modal>
+                ))
+            ) : (
+                <Typography>No employees available</Typography>
+            )}
         </div>
-        );
-    };
+    );
+};
 
 export default EmployeeList;
 
