@@ -25,6 +25,7 @@ import { Link as RouterLink, Outlet, useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged, signOut  } from "firebase/auth";
 import { useState, useEffect } from 'react';
 import firebaseApp from "./firebaseConfig";
+import DateAndTime from './DateAndTime';
 
 const drawerWidth = 240;
 
@@ -97,7 +98,6 @@ function Layout() {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const [userProfile, setUserProfile] = useState('');
-    const [greeting, setGreeting] = useState('');
     const auth = getAuth(firebaseApp);
     let navigate = useNavigate();
 
@@ -114,16 +114,6 @@ function Layout() {
                 navigate('/login');
             }
         });
-
-        const date = new Date();
-        const hour = date.getHours();
-        if (hour >= 5 && hour < 12) {
-            setGreeting('Good morning');
-        } else if (hour >= 12 && hour < 18) {
-            setGreeting('Good afternoon');
-        } else {
-            setGreeting('Good evening');
-        }
 
     },[]);
 
@@ -178,9 +168,7 @@ function Layout() {
             </IconButton>
             </DrawerHeader>
             <Divider />
-            <Typography variant="body1" align="center" sx={{ opacity: open ? 1 : 0, py: 2, bgcolor: '#212121', color: '#f5f5f5' }}>
-            {greeting}, {userProfile.name}!  
-            </Typography>
+            
             
             <Divider />
             <List sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }} >
@@ -287,9 +275,15 @@ function Layout() {
 
                 </ListItem>
             </List>
-
+            
             <Divider />
+
     <Typography variant="body2" align="center" sx={{ opacity: open ? 1 : 0, py: 2, bgcolor: '#212121', color: '#f5f5f5' }}>
+        <Typography>
+            Hello, {userProfile.name}! 👋🏻  
+            </Typography>
+        <DateAndTime />
+        <hr />
         Developed by <strong>Allen</strong> @ <strong>BASE-404</strong>
     </Typography>
         </Drawer>

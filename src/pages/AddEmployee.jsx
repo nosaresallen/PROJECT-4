@@ -10,11 +10,6 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogActions from '@mui/material/DialogActions';
 
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -27,12 +22,10 @@ const defaultTheme = createTheme();
 
 export default function AddEmployee() {
 
+    const db = getFirestore(firebassApp);
+    const [employeeList, setEmployeeList] = useState([]);
     const [open, setOpen] = useState(false);
 
-    const handleClose = () => {
-        setOpen(false);
-    };
-    
     const [employee, setEmployee] = useState({
         firstname: '',
         lastname: '', 
@@ -45,12 +38,9 @@ export default function AddEmployee() {
     });
 
 
-    const [employeeList, setEmployeeList] = useState([]);
+    
 
     useEffect(()=>{
-        
-        const db = getFirestore(firebassApp);
-    
         try {
             onSnapshot(collection(db, 'employees'), snapshot => {
                 const newEmployeeList = [];
@@ -71,19 +61,28 @@ export default function AddEmployee() {
 
 
     // ======================================= ADD DATA TO FIRESTORE=======================================
-    
     const addEmployee = () => {
         
-        const db = getFirestore(firebassApp);
         // if(employee.firstname === '' || employee.lastname === '' || employee.grade === '')
-        setEmployeeList(
-            employeeList => [
-                ...employeeList, employee
-            ]
-        );
-
-        addDoc(collection(db, 'employees'),employee);
-
+        if(
+            employee.firstname !== '' && 
+            employee.lastname !== '' && 
+            employee.address !== '' && 
+            employee.contact !== '' && 
+            employee.gender !== '' &&
+            employee.email !== '' &&
+            employee.position !== '' &&
+            employee.hiredate !== '' 
+        ){
+            setEmployeeList(
+                employeeList => [
+                    ...employeeList, employee
+                ]);
+            addDoc(collection(db, 'employees'),employee);
+        }else {
+            alert('Please fill out all fields');
+        }
+        
         setEmployee({
             firstname: '',
             lastname: '', 
@@ -94,10 +93,7 @@ export default function AddEmployee() {
             position: '',
             hiredate: '',
         });
-
         setOpen(true);
-
-        
     }
 
     return (
@@ -328,20 +324,6 @@ export default function AddEmployee() {
                 >
                 Add employee
                 </Button>
-                <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-                    <DialogTitle>Successful!</DialogTitle>
-                    <DialogContent>
-                    <DialogContentText>
-                        Employee Added!
-                    </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        OK
-                    </Button>
-                    </DialogActions>
-            </Dialog>
-                
             </Box>
             </Box>
 

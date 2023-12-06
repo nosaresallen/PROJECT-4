@@ -28,7 +28,8 @@ import { PieChart } from '@mui/x-charts';
 import { useState, useEffect } from 'react';
 import { getFirestore, collection, onSnapshot, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import firebassApp from './firebaseConfig';
-import { grey, red } from '@mui/material/colors';
+import { grey, red, teal } from '@mui/material/colors';
+
 
 const EmployeeList = () => {
     const [employeeList, setEmployeeList] = useState([]);
@@ -153,27 +154,59 @@ const EmployeeList = () => {
         }
     };
 
+    const handleClearTextField = () =>{
+        setFilterText('');
+    }
+
     
     return (
         <div>
-            <PieChart
-            series={[
-                {
-                data: pieChartData,
-                },
-            ]}
-            width={800}
-            height={250}
-            />
-            <TextField
-                label="Search Employee"
-                variant="outlined"
-                value={filterText}
-                onChange={(e) => setFilterText(e.target.value)}
-                style={{ marginBottom: '20px' }}
-            />
-                
-            <TableContainer component={Paper} style={{ overflowX: 'auto', maxHeight: '400px' }}>
+            {/* <Card sx={{ width: 300 }}>
+            <CardContent>
+                <Typography variant="h4" component="div">
+                100
+                </Typography>
+                <Typography variant="h5" component="div">
+                Employees
+                </Typography>
+            </CardContent>
+            </Card> */}
+            <Box sx={{ display: 'flex', justifyContent: 'flex-center' }}>
+                <PieChart
+                series={[
+                    {
+                    data: pieChartData,
+                    },
+                ]}
+                width={800}
+                height={250}
+                />
+            </Box>
+            
+            <Box sx={{display: 'flex', justifyContent: 'flex-end' }}>
+                <TextField
+                    color='primary'
+                    size="small"
+                    label="Search Employee*"
+                    variant="outlined"
+                    value={filterText}
+                    onChange={(e) => setFilterText(e.target.value)}
+                    style={{ marginBottom: '10px' }}
+                    
+                />
+                <Button onClick={() =>handleClearTextField()} variant="contained" size="medium" sx={{
+                            marginLeft: '10px', 
+                            height: '100%',
+                            backgroundColor: 'black',
+                            color: 'white'
+                        }} >
+                    Clear
+                </Button>
+            </Box>
+            
+            <Grid container>
+                <Grid item xs={12}>
+                <TableContainer component={Paper} style={{ overflowX: 'auto', maxHeight: '400px' }}>
             <Table aria-label="employee table">
             <TableHead style={{ position: 'sticky', top: 0, background: grey[900],  zIndex: 1 }}>
                 <TableRow >
@@ -193,7 +226,7 @@ const EmployeeList = () => {
                         <TableCell style={{ textAlign: 'center' }}>{employee.email}</TableCell>
                         <TableCell style={{ textAlign: 'center' }}>{employee.position}</TableCell>
                     <TableCell style={{ textAlign: 'center' }}>
-                    <IconButton  sx={{ color: grey[600] }}
+                    <IconButton  sx={{ color: teal[500] }}
                         aria-label="view"
                         onClick={() => handleCardEmployee(employee.employee_id)}
                         >
@@ -216,6 +249,10 @@ const EmployeeList = () => {
             </TableBody>
             </Table>
         </TableContainer>
+                </Grid>
+            </Grid>
+                
+            
         {employeeList.length > 0 ? (
         filteredEmployees.map((employee) => (
         <Modal 
@@ -375,9 +412,13 @@ const EmployeeList = () => {
                                             /* Show Save button in edit mode */
                                             <Button
                                                 variant="contained"
-                                                color="success"
                                                 onClick={handleSaveEmployee}
-                                            >
+                                                sx={{
+                                                    marginLeft: '10px', 
+                                                    height: '100%',
+                                                    backgroundColor: 'black',
+                                                    color: 'white'
+                                                }} >
                                                 Save
                                             </Button>
                                         ) : (
@@ -386,7 +427,13 @@ const EmployeeList = () => {
                                                 variant="contained"
                                                 color="primary"
                                                 onClick={handleEditEmployee}
-                                            >
+                                                sx={{
+                                                    marginLeft: '10px', 
+                                                    height: '100%',
+                                                    backgroundColor: 'black',
+                                                    color: 'white'
+                                                }} >
+                                            
                                                 Edit
                                             </Button>
                                         )}
