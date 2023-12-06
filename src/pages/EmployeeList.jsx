@@ -329,8 +329,10 @@ const EmployeeList = () => {
                                                 onChange={(e) => setEditableEmployee({ ...editableEmployee, hiredate: e.target.value })}
                                                 variant="outlined"
                                                 fullWidth
+                                                type="date"
                                                 sx={{ mb: 2 }}
                                             />
+                                            
 
                                             
                                         </div>

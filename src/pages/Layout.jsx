@@ -21,6 +21,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import Tooltip from '@mui/material/Tooltip';
 import { grey } from '@mui/material/colors';
 
+
 import { Link as RouterLink, Outlet, useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged, signOut  } from "firebase/auth";
 import { useState, useEffect } from 'react';
@@ -100,6 +101,7 @@ function Layout() {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
     const [userProfile, setUserProfile] = useState('');
+    const [greeting, setGreeting] = useState('');
     const auth = getAuth(firebaseApp);
     let navigate = useNavigate();
 
@@ -116,6 +118,16 @@ function Layout() {
                 navigate('/login');
             }
         });
+
+        const date = new Date();
+        const hour = date.getHours();
+        if (hour >= 5 && hour < 12) {
+            setGreeting('Good morning');
+        } else if (hour >= 12 && hour < 18) {
+            setGreeting('Good afternoon');
+        } else {
+            setGreeting('Good evening');
+        }
 
     },[]);
 
@@ -175,7 +187,7 @@ function Layout() {
             </DrawerHeader>
             <Divider />
             <Typography variant="body1" align="center" sx={{ opacity: open ? 1 : 0, py: 2, bgcolor: '#212121', color: '#f5f5f5' }}>
-                Hello, {userProfile.name}   
+            {greeting}, {userProfile.name}!  
             </Typography>
             
             <Divider />
