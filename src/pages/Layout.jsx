@@ -21,12 +21,10 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import Tooltip from '@mui/material/Tooltip';
 import { grey } from '@mui/material/colors';
 
-
 import { Link as RouterLink, Outlet, useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged, signOut  } from "firebase/auth";
 import { useState, useEffect } from 'react';
 import firebaseApp from "./firebaseConfig";
-
 
 const drawerWidth = 240;
 
@@ -95,8 +93,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
     );
 
-    
-
 function Layout() {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
@@ -139,7 +135,6 @@ function Layout() {
         setOpen(false);
     };
 
-    //Function to logout from dashboard
     const handleLogout = () => {
         const auth = getAuth(firebaseApp);
         signOut(auth)
@@ -152,9 +147,6 @@ function Layout() {
             });
         
     };
-
-    
-
 
     return (
         <Box sx={{ display: 'flex' }} >

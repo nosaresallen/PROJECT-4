@@ -69,14 +69,15 @@ const EmployeeList = () => {
     }
     }, []);
     
-
+    
     const deleteEmployee = async (employeeID) => {
+        confirm(`Are you sure you want to delete`);
             try {
             await deleteDoc(doc(db, 'employees', employeeID));
-            
             // Filter out the deleted employee from the state
             const updatedList = employeeList.filter((employee) => employee.employee_id !== employeeID);
             setEmployeeList(updatedList);
+            
             } catch (error) {
             console.error('Error deleting document: ', error);
             }
@@ -87,6 +88,7 @@ const EmployeeList = () => {
         const fullName = `${employee.firstname} ${employee.lastname}`.toLowerCase();
         const email = employee.email.toLowerCase();
         const position = employee.position.toLowerCase();
+        
                 
         return (
             fullName.startsWith(searchText) ||
@@ -173,13 +175,13 @@ const EmployeeList = () => {
                 
             <TableContainer component={Paper} style={{ overflowX: 'auto', maxHeight: '400px' }}>
             <Table aria-label="employee table">
-            <TableHead style={{ position: 'sticky', top: 0, background: grey[500], color: 'white', zIndex: 1 }}>
+            <TableHead style={{ position: 'sticky', top: 0, background: grey[900],  zIndex: 1 }}>
                 <TableRow >
-                    <TableCell style={{ width: '20%',fontWeight: 'bold', textAlign: 'center' }}>First Name</TableCell>
-                    <TableCell style={{ width: '20%',fontWeight: 'bold', textAlign: 'center' }}>Last Name</TableCell>
-                    <TableCell style={{ width: '20%',fontWeight: 'bold', textAlign: 'center' }}>Email</TableCell>
-                    <TableCell style={{ width: '20%',fontWeight: 'bold', textAlign: 'center' }}>Position</TableCell>
-                    <TableCell style={{ width: '20%',fontWeight: 'bold', textAlign: 'center' }}>Action</TableCell>
+                    <TableCell style={{ color: 'white', width: '20%',fontWeight: 'bold', textAlign: 'center' }}>First Name</TableCell>
+                    <TableCell style={{ color: 'white',width: '20%',fontWeight: 'bold', textAlign: 'center' }}>Last Name</TableCell>
+                    <TableCell style={{ color: 'white',width: '20%',fontWeight: 'bold', textAlign: 'center' }}>Email</TableCell>
+                    <TableCell style={{ color: 'white',width: '20%',fontWeight: 'bold', textAlign: 'center' }}>Position</TableCell>
+                    <TableCell style={{ color: 'white',width: '20%',fontWeight: 'bold', textAlign: 'center' }}>Action</TableCell>
             </TableRow>
             </TableHead>
             <TableBody>
@@ -203,7 +205,6 @@ const EmployeeList = () => {
                         >
                         <DeleteIcon />
                     </IconButton>
-                            
                     </TableCell>
                     </TableRow>
                 ))
