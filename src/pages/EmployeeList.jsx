@@ -117,10 +117,10 @@ const EmployeeList = () => {
         label: position,
     }));
 
-    // const handleCardEmployee = (employeeID) => {
-    //     alert('View me');
+    const handleEditEmployee = (employeeID) => {
+        alert('View me');
         
-    // }
+    }
 
     
     return (
@@ -189,7 +189,7 @@ const EmployeeList = () => {
         </TableContainer>
         {employeeList.length > 0 ? (
         filteredEmployees.map((employee) => (
-        <Modal
+        <Modal 
             key={employee.employee_id}
             open={openModals[employee.employee_id] || false}
             onClose={() => handleCloseModal(employee.employee_id)}
@@ -205,48 +205,53 @@ const EmployeeList = () => {
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
                 bgcolor: 'white',
-                border: '2px solid #000',
+                // border: '2px #000',
+                borderRadius: '10px',
                 boxShadow: 24,
                 p: 4,
                 }}>
                 {/* Content of your modal */}
                 <Typography id="modal-modal-title" variant="h4" component="h2">
-                    Employee Details
+                    <strong>Employee Information</strong>
                 </Typography>
                 <hr />
                 <Typography variant="body1">
-                    First name: {employee.firstname}
+                    <strong>First name:</strong> {employee.firstname} 
+                    <TextField variant="standard" size="small"/>
                 </Typography>
                 <Typography variant="body1">
-                    Last name: {employee.lastname}
+                    <strong>Last name:</strong> {employee.lastname}
+                    <TextField variant="standard" size="small"/>
                 </Typography>
                 <Typography variant="body1">
-                    Address: {employee.address}
+                    <strong>Address:</strong> {employee.address}
+                    
                 </Typography>
                 <Typography variant="body1">
-                    Contact: {employee.contact}
+                    <strong>Contact:</strong> {employee.contact}
+                    <TextField variant="standard" size="small"/>
                 </Typography>
                 <Typography variant="body1">
-                    Gender: {employee.gender}
+                    <strong>Gender:</strong> {employee.gender}
                 </Typography>
                 <Typography variant="body1">
-                    Email: {employee.email}
+                    <strong>Email:</strong> <em>{employee.email}</em>
                 </Typography>
                 <Typography variant="body1">
-                    Position: {employee.position}
+                    <strong>Position:</strong> {employee.position}
                 </Typography>
                 <Typography variant="body1">
-                    Hire Date: {employee.hiredate}
+                    <strong>Hire Date</strong>: {employee.hiredate}
                 </Typography>
-                <button>
-                    Edit
-                </button>
-                <button>
-                    Save
-                </button>
+                <Box onClick={() => handleEditEmployee(employee.employee_id)} sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+                    <button style={{ backgroundColor: 'green', color: 'white', borderRadius: '8px', border: 'none',
+                    padding: '10px 15px', }}>
+                        Edit
+                    </button>
+                </Box>
             </Box>
         </Modal>
-        ))
+        )) 
         ) : (
             <Typography >
                     No employees available
