@@ -18,7 +18,10 @@ import {
     InputLabel,
     Select,
     MenuItem,
+    Card,
+    CardContent
 } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 
 import { Button } from '@mui/material';
 
@@ -157,13 +160,27 @@ const EmployeeList = () => {
     const handleClearTextField = () =>{
         setFilterText('');
     }
+    // Function to compute total employees
+    const getTotalEmployees = () => {
+        return employeeList.length;
+    };
 
     
     return (
         <div>
+            <Tooltip title='Total Employees' placement='right'>
+                <Card  sx={{ width: 250, backgroundColor: 'teal', color: 'white', textAlign: 'center'}}>
+                    <CardContent>
+                        <Typography variant="h6">Total employees: </Typography>
+                        <Typography variant="h3"> {getTotalEmployees()}</Typography>
+                    </CardContent>
+                </Card>            
+            </Tooltip>
+            
+            
             {/* <Card sx={{ width: 300 }}>
             <CardContent>
-                <Typography variant="h4" component="div">
+                <Typography variant="h4" component="div">s
                 100
                 </Typography>
                 <Typography variant="h5" component="div">
