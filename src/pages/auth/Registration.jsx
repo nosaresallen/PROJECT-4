@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
-import { IconButton, InputAdornment } from '@mui/material';
+import { IconButton, InputAdornment} from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile } from "firebase/auth";
@@ -70,6 +70,16 @@ export default function Registration() {
         setShowPassword(!showPassword);
     };
 
+    //Validation of Email
+    const [error, setError] = useState(false);
+
+    const handleEmailChange = (e) => {
+        const emailValue = e.target.value;
+        setEmail(emailValue);
+        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+        setError(!isValidEmail);
+    };
+
     return (
         <ThemeProvider theme={defaultTheme}>
         <Container component="main" maxWidth="xs">
@@ -108,8 +118,10 @@ export default function Registration() {
                     id="email"
                     label="Email Address"
                     name="email"
-                    onChange={(e)=>setEmail(e.target.value)}
+                    onChange={handleEmailChange}
                     value={email}
+                    error={error}
+                    helperText={error ? 'Invalid email format' : ''}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -159,15 +171,23 @@ export default function Registration() {
                 fullWidth
                 variant="contained"
                 onClick={()=>handleRegister()}
-                sx={{ mt: 3, mb: 2, bgcolor: grey[900] }}
+                sx={{
+                    mt: 3,
+                    mb: 2,
+                    bgcolor: grey[900],
+                    transition: 'background-color 0.3s',
+                                '&:hover': {
+                                    backgroundColor: 'teal'},}}
                 >
                 Register
                 </Button>
                 <Grid container justifyContent="flex-end">
                 <Grid item>
-                    <RouterLink to='/login' variant="body2">
-                    Already have an account? Login here.
-                    </RouterLink>
+                    <Typography variant="body2" >
+                        <RouterLink to='/login' style={{textDecoration: 'none', color: 'teal'}}>
+                            Already have an account? Login here.
+                        </RouterLink>
+                    </Typography>
                 </Grid>
                 </Grid>
             </Box>

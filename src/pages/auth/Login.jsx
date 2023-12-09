@@ -8,7 +8,7 @@ import Container from '@mui/material/Container';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { grey } from '@mui/material/colors';
+import { grey, teal } from '@mui/material/colors';
 import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
@@ -53,6 +53,16 @@ function Login() {
         setShowPassword(!showPassword);
     };
 
+    //Validation of Email
+    const [error, setError] = useState(false);
+
+    const handleEmailChange = (e) => {
+        const emailValue = e.target.value;
+        setEmail(emailValue);
+        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+        setError(!isValidEmail);
+    };
+
     const defaultTheme = createTheme();
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -82,8 +92,10 @@ function Login() {
                             type="email"
                             label="Email Address"
                             name="email"
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={handleEmailChange}
                             value={email}
+                            error={error}
+                            helperText={error ? 'Invalid email format' : ''}
                         />
                         <TextField
                             margin="normal"
@@ -108,24 +120,34 @@ function Login() {
                         <Button
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2, bgcolor: grey[900] }}
+                            sx={{
+                                mt: 3,
+                                mb: 2,
+                                bgcolor: grey[900],
+                                transition: 'background-color 0.3s',
+                                '&:hover': {
+                                    backgroundColor: 'teal'},
+                                }}
                             onClick={() => handleLogin()}
-                        >
+                        > 
                             Login
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <RouterLink to='/register' variant="body2">
-                                    {`Don't have an account? Register here.`}
+                            <Typography variant="body2" >
+                                <RouterLink to='/register' style={{textDecoration: 'none', color: 'teal'}}>
+                                {`Don't have an account? Register here.`}
                                 </RouterLink>
+                            </Typography>
                             </Grid>
                         </Grid>
                     </Box>
                 </Box>
-
             </Container>
         </ThemeProvider>
     )
 }
 
 export default Login
+
+
