@@ -299,14 +299,17 @@ const EmployeeList = () => {
                                     {isEditMode ? (
                                         /* Display editable fields in edit mode */
                                         <div>
-                                            
+                                            <Typography variant="h4" component="h4" sx={{ color:'teal'}}>
+                                                <strong>Edit Employee</strong> 
+                                            </Typography>
+                                            <hr />
                                             <TextField
                                                 label="First Name"
                                                 value={editableEmployee.firstname}
                                                 onChange={(e) => setEditableEmployee({ ...editableEmployee, firstname: e.target.value })}
                                                 variant="outlined"
                                                 fullWidth
-                                                sx={{ mb: 2 }}
+                                                sx={{ mb: 2,mt:2 }}
                                             />
                                             
                                             <TextField
@@ -415,8 +418,8 @@ const EmployeeList = () => {
                                     ) : (
                                         /* Display non-editable fields in view mode */
                                         <div>
-                                            <Typography variant="h4" component="h4">
-                                                <strong>Employee Information</strong> 
+                                            <Typography variant="h4" component="h4"  sx={{ color:'teal'}}>
+                                                <strong >Employee Information</strong> 
                                             </Typography>
                                             <hr />
                                             <Typography variant="body1">

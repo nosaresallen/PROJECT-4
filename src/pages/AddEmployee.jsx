@@ -25,6 +25,15 @@ export default function AddEmployee() {
     const db = getFirestore(firebassApp);
     const [employeeList, setEmployeeList] = useState([]);
     const [open, setOpen] = useState(false);
+
+    //Image
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    // Function to handle image selection
+    const handleImageChange = (event) => {
+    const imageFile = event.target.files[0];
+    setSelectedImage(imageFile);
+    };
     
 
     const [employee, setEmployee] = useState({
