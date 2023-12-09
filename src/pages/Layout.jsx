@@ -20,6 +20,7 @@ import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import Tooltip from '@mui/material/Tooltip';
 import { grey } from '@mui/material/colors';
+import WavingHandIcon from '@mui/icons-material/WavingHand';
 
 import { Link as RouterLink, Outlet, useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged, signOut  } from "firebase/auth";
@@ -280,7 +281,7 @@ function Layout() {
 
     <Typography variant="body2" align="center" sx={{ opacity: open ? 1 : 0, py: 2, bgcolor: '#212121', color: '#f5f5f5' }}>
         <Typography>
-            Hello, {userProfile.name}! 👋🏻  
+            Hello, {userProfile.name}! <WavingHandIcon sx={{ fontSize: 15}}/>  
             </Typography>
         <DateAndTime />
         <hr />

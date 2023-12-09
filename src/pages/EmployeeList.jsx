@@ -22,6 +22,7 @@ import {
     CardContent
 } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
+import GroupsIcon from '@mui/icons-material/Groups';
 
 import { Button } from '@mui/material';
 
@@ -172,7 +173,7 @@ const EmployeeList = () => {
                 <Card  sx={{ width: 250, backgroundColor: 'teal', color: 'white', textAlign: 'center'}}>
                     <CardContent>
                         <Typography variant="h6">Total employees: </Typography>
-                        <Typography variant="h3"> {getTotalEmployees()}</Typography>
+                        <Typography variant="h3"><GroupsIcon  sx={{ fontSize: 30}}/>{getTotalEmployees()}</Typography>
                     </CardContent>
                 </Card>            
             </Tooltip>
