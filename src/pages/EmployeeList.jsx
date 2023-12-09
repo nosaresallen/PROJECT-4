@@ -336,14 +336,33 @@ const EmployeeList = () => {
                                                 sx={{ mb: 2 }}
                                             />
 
-                                            <TextField
-                                                label="Gender"
-                                                value={editableEmployee.gender}
-                                                onChange={(e) => setEditableEmployee({ ...editableEmployee, gender: e.target.value })}
-                                                variant="outlined"
-                                                fullWidth
-                                                sx={{ mb: 2 }}
-                                            />
+
+                                            <Grid sx={{ mb: 2 }}>       
+                                                <FormControl fullWidth>
+                                                <InputLabel id="gender">Gender*</InputLabel>
+                                                    <Select
+                                                    
+                                                    required
+                                                    fullWidth
+                                                    name="gender"
+                                                    type="gender"
+                                                    labelId="gender"
+                                                    id="gender"
+                                                    variant='outlined'
+                                                    size="medium"
+                                                    label="Gender"
+                                                    onChange={(e) => setEditableEmployee({ ...editableEmployee, gender: e.target.value })}
+                                                    value={editableEmployee.gender}
+
+                                                    >
+                                                        <MenuItem value={'Male'}>Male</MenuItem>
+                                                        <MenuItem value={'Female'}>Female</MenuItem>
+                                                        <MenuItem value={'Other'}>Other</MenuItem>
+                                                    </Select>
+                                            </FormControl>
+                                            </Grid>
+
+                                        
 
                                             <TextField
                                                 label="Email"
@@ -352,6 +371,7 @@ const EmployeeList = () => {
                                                 variant="outlined"
                                                 fullWidth
                                                 sx={{ mb: 2 }}
+                                                
                                             />
 
                                             <Grid sx={{ mb: 2 }}>

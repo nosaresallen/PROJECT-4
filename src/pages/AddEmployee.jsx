@@ -25,17 +25,31 @@ export default function AddEmployee() {
     const db = getFirestore(firebassApp);
     const [employeeList, setEmployeeList] = useState([]);
     const [open, setOpen] = useState(false);
+    
 
     const [employee, setEmployee] = useState({
         firstname: '',
         lastname: '', 
         address: '',
-        contact: 0,
+        contact: '',
         gender: '',
         email: '',
         position: '',
         hiredate: '',
     });
+
+    //Validation of Email
+    const [error, setError] = useState(false);
+
+    const handleEmailChange = (e) => {
+        const emailValue = e.target.value;
+        // Basic email validation
+        const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue);
+
+        setEmployee({ ...employee, email: emailValue });
+        setError(!isValidEmail);
+    };
+
 
 
     
@@ -115,18 +129,6 @@ export default function AddEmployee() {
                 Add Employee
             </Typography>
 
-            {/* <p>
-            {employee.firstname}
-            {employee.lastname}
-            {employee.address}
-            {employee.contact}
-            {employee.gender}
-            {employee.email}
-            {employee.position}
-            {employee.hiredate}
-            </p> */}
-            
-            {/* add onSubmit */}
             <Box component="form" noValidate  sx={{ mt: 3 }}> {/* onSubmit={handleSubmit} */}
                 <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
@@ -137,9 +139,9 @@ export default function AddEmployee() {
                     fullWidth
                     id="firstname"
                     label="First Name"
-                    variant='filled'
+                    variant='outlined'
                     autoFocus
-                    size="small"
+                    size="medium"
                     onChange={(e)=>setEmployee({
                         ...employee,
                         firstname: e.target.value
@@ -154,8 +156,8 @@ export default function AddEmployee() {
                     id="lastname"
                     label="Last Name"
                     name="lastname"
-                    variant='filled'
-                    size="small"
+                    variant='outlined'
+                    size="medium"
                     onChange={(e)=>setEmployee({
                         ...employee,
                         lastname: e.target.value
@@ -170,8 +172,8 @@ export default function AddEmployee() {
                     id="address"
                     label="Address"
                     name="address"
-                    variant='filled'
-                    size="small"
+                    variant='outlined'
+                    size="medium"
                     onChange={(e)=>setEmployee({
                         ...employee,
                         address: e.target.value
@@ -188,32 +190,49 @@ export default function AddEmployee() {
                     label="Contact"
                     type="number"
                     id="contact"
-                    variant='filled'
-                    size="small"
+                    variant='outlined'
+                    size="medium"
                     onChange={(e)=>setEmployee({
                         ...employee,
                         contact: e.target.value
                     })}
                     value={employee.contact}
+                    inputProps={{
+                        min: 0,
+                    }}
                     />
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                    <TextField
+                <FormControl fullWidth>
+                <InputLabel id="gender">Gender*</InputLabel>
+                    <Select
+                    
                     required
                     fullWidth
-                    id="gender"
-                    label="Gender"
                     name="gender"
-                    variant='filled'
-                    size="small"
+                    type="gender"
+                    labelId="gender"
+                    id="gender"
+                    variant='outlined'
+                    size="medium"
+                    label="Gender"
                     onChange={(e)=>setEmployee({
                         ...employee,
                         gender: e.target.value
                     })}
+                    
                     value={employee.gender}
-                    />
+                    
+                    >
+                        <MenuItem value={'Male'}>Male</MenuItem>
+                        <MenuItem value={'Female'}>Female</MenuItem>
+                        <MenuItem value={'Other'}>Other</MenuItem>
+                    </Select>
+                    </FormControl>
                 </Grid>
+
+                
                 
                 <Grid item xs={12}>
                     <TextField
@@ -222,34 +241,26 @@ export default function AddEmployee() {
                     id="email"
                     label="Email"
                     name="email"
-                    variant='filled'
-                    size="small"
-                    onChange={(e)=>setEmployee({
-                        ...employee,
-                        email: e.target.value
-                    })}
+                    variant='outlined'
+                    size="medium"
+                    // onChange={(e)=>setEmployee({
+                    //     ...employee,
+                    //     email: e.target.value
+                    // })}
+                    onChange={handleEmailChange}
+
                     value={employee.email}
+                    error={error}
+                    helperText={error ? 'Invalid email format' : ''}
+                    InputProps={{
+                    type: 'email',
+                }}
                     />
+                    
                 </Grid>
-                {/* <Grid item xs={12}>
-                    <TextField
-                    required
-                    fullWidth
-                    name="position"
-                    label="Position"
-                    type="position"
-                    id="position"
-                    variant='filled'
-                    size="small"
-                    onChange={(e)=>setEmployee({
-                        ...employee,
-                        position: e.target.value
-                    })}
-                    value={employee.position}
-                    />
-                </Grid> */}
+
                 <Grid item xs={12}>
-                <FormControl fullWidth>
+                <FormControl fullWidth >
                 <InputLabel id="position">Position*</InputLabel>
                     <Select
                     
@@ -260,8 +271,8 @@ export default function AddEmployee() {
                     type="position"
                     labelId="position"
                     id="position"
-                    variant='filled'
-                    size="small"
+                    variant='outlined'
+                    size="medium"
                     label="Position"
                     onChange={(e)=>setEmployee({
                         ...employee,
@@ -280,18 +291,6 @@ export default function AddEmployee() {
                     </FormControl>
                 </Grid>
 
-
-                
-                {/* <Grid item xs={12}>
-                    <TextField
-                    required
-                    fullWidth
-                    name="dateofbirth"
-                    label=""
-                    type="date"
-                    id="dateofbirth"
-                    />
-                </Grid> */}
                 <Grid item xs={12}>
                     <TextField
                     required
@@ -300,8 +299,8 @@ export default function AddEmployee() {
                     label="Hire Date " 
                     type="date"
                     id="hiredate"
-                    variant='filled'
-                    size="small"
+                    variant='outlined'
+                    size="medium"
                     InputLabelProps={{
                         shrink: true,
                     }}
