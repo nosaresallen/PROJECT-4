@@ -39,6 +39,11 @@ function Login() {
             const auth = getAuth(firebaseApp);
             signInWithEmailAndPassword(auth, email, password)
                 .then(() => {
+                    Swal.fire({
+                        title: "Login Successfully!",
+                        icon: "success",
+                        confirmButtonColor: "black"
+                    });
                     navigate('/')
                 })
                 .catch(() => {
