@@ -152,7 +152,7 @@ export default function AddEmployee() {
 
             <Box component="form" noValidate  sx={{ mt: 3 }}> 
                 <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={6} >
                     <TextField
                     autoComplete="given-name"
                     name="firstname"

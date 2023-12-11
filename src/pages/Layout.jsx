@@ -161,8 +161,8 @@ function Layout() {
     
 
     return (
-        <Box sx={{ display: 'flex' }} >
-        <CssBaseline />
+        <Box component="main" sx={{display:'flex'}}>
+        <CssBaseline/>
         <AppBar position="fixed" open={open} sx={{ bgcolor: grey[900] }}>
             <Toolbar  >
             <IconButton 
@@ -180,6 +180,7 @@ function Layout() {
             <Typography variant="h5" noWrap component="div" >
                 EMPLOYEE MANAGEMENT DASHBOARD
             </Typography>
+            
             
             </Toolbar>
         </AppBar>
@@ -318,10 +319,8 @@ function Layout() {
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-            }}></Outlet>
-
-            
-            
+            }}>
+            </Outlet>
             </section>
         </Box>
         </Box>

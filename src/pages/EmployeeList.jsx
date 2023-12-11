@@ -212,7 +212,11 @@ const EmployeeList = () => {
                 <PieChart
                 series={[
                     {
+                    outerRadius: 60,
+                    cornerRadius: 5,
                     data: pieChartData,
+                    highlightScope: { faded: 'global', highlighted: 'item' },
+                    faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
                     },
                 ]}
                 width={800}
@@ -220,7 +224,9 @@ const EmployeeList = () => {
                 />
             </Box>
             
-            <Box sx={{display: 'flex', justifyContent: 'flex-end' }}>
+            <Grid container>
+                <Grid item xs={12}>
+                <Box sx={{display: 'flex', justifyContent: 'flex-start' }}>
                 <TextField
                     color='primary'
                     size="small"
@@ -244,12 +250,9 @@ const EmployeeList = () => {
                     Clear
                 </Button>
             </Box>
-            
-            <Grid container>
-                <Grid item xs={12}>
-                <TableContainer component={Paper} style={{ overflowX: 'auto', maxHeight: '400px' }}>
-            <Table aria-label="employee table">
-            <TableHead style={{ position: 'sticky', top: 0, background: grey[900],  zIndex: 1 }}>
+                <TableContainer component={Paper} style={{ overflowX: 'auto', maxHeight: '250px' }} >
+            <Table aria-label="employee table" size="small">
+            <TableHead style={{ position: 'sticky', top: 0, background: grey[900],  zIndex: 1 }} >
                 <TableRow >
                     <TableCell style={{ color: 'white', width: '20%',fontWeight: 'bold', textAlign: 'center' }}>First Name</TableCell>
                     <TableCell style={{ color: 'white',width: '20%',fontWeight: 'bold', textAlign: 'center' }}>Last Name</TableCell>
