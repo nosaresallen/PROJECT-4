@@ -8,14 +8,16 @@ import Container from '@mui/material/Container';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { grey, teal } from '@mui/material/colors';
+import { grey, red } from '@mui/material/colors';
 import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+
+import Swal from 'sweetalert2';
 
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import firebaseApp from "../firebaseConfig";
-import { useState, useEffect } from 'react';
+import { useState, useEffect} from 'react';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -39,11 +41,21 @@ function Login() {
                 .then(() => {
                     navigate('/')
                 })
-                .catch((error) => {
-                    alert('Error: ' + error.message);
+                .catch(() => {
+                    Swal.fire({
+                        title: "Login Failed!",
+                        text: "Invalid email or password.",
+                        icon: "error",
+                        confirmButtonColor: "black"
+                    });
                 });
         } else {
-            alert('Incorrect credentials')
+            Swal.fire({
+                title: "Try Again!",
+                text: "Please fill out the fields.",
+                icon: "warning",
+                confirmButtonColor: "black"
+            });
         }
 
     }

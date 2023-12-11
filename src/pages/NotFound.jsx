@@ -7,10 +7,7 @@ import SatelliteAltIcon from '@mui/icons-material/SatelliteAlt';
 
 export default function NotFound() {
     useEffect(() => {
-        // Apply background color to the body
         document.body.style.backgroundColor = 'black';
-    
-        // Clean up the style when the component unmounts
         return () => {
             document.body.style.backgroundColor = '';
             };
@@ -47,7 +44,7 @@ export default function NotFound() {
                         flexDirection: 'column',
                         justifyContent: 'center',
                         alignItems: 'center'}} >
-                {`the page you are looking for not available`}
+                {`the page you are looking for is not available`}
             </Typography>
             <Button  href='/login' sx={{color:"black",
                         backgroundColor: "white",

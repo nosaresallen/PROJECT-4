@@ -14,6 +14,8 @@ import { grey } from '@mui/material/colors';
 import { IconButton, InputAdornment} from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
+import Swal from 'sweetalert2';
+
 import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile } from "firebase/auth";
 import firebaseApp from "../firebaseConfig";
 import { useState, useEffect } from 'react';
@@ -55,11 +57,20 @@ export default function Registration() {
                     })
                 })
                 .catch(() => {
-                    alert('Registeration Failed');
-                    // ..
+                    Swal.fire({
+                        title: "Registration Failed!",
+                        text: "Please input correct credentials.",
+                        icon: "error",
+                        confirmButtonColor: "black"
+                    });
                 });
         }else{
-            alert('Incorrect credentials')
+            Swal.fire({
+                title: "Registration Failed!",
+                text: "Please fill out all the fields.",
+                icon: "warning",
+                confirmButtonColor: "black"
+            });
         }
         
     }

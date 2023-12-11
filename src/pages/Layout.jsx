@@ -22,6 +22,8 @@ import Tooltip from '@mui/material/Tooltip';
 import { grey } from '@mui/material/colors';
 import WavingHandIcon from '@mui/icons-material/WavingHand';
 
+import Swal from 'sweetalert2';
+
 import { Link as RouterLink, Outlet, useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged, signOut  } from "firebase/auth";
 import { useState, useEffect } from 'react';
@@ -127,17 +129,34 @@ function Layout() {
     };
 
     const handleLogout = () => {
-        const auth = getAuth(firebaseApp);
-        signOut(auth)
-            .then(() => {
-                confirm('Are you sure you want to logout?');
-                navigate('/login');
-            })
-            .catch((error) => {
-                console.log('Error during logout:', error);
-            });
-        
+        Swal.fire({
+            title: 'Logout',
+            text: 'Are you sure you want to logout?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#008080',
+            cancelButtonColor: '#000000',
+            confirmButtonText: 'Yes, logout'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const auth = getAuth(firebaseApp);
+                signOut(auth)
+                    .then(() => {
+                        Swal.fire({
+                            title: 'Logged Out',
+                            text: 'You have been logged out successfully.',
+                            icon: 'success',
+                            confirmButtonColor: 'black'
+                        });
+                        navigate('/login');
+                    })
+                    .catch((error) => {
+                        console.log('Error during logout:', error);
+                    });
+            }
+        });
     };
+    
 
     return (
         <Box sx={{ display: 'flex' }} >

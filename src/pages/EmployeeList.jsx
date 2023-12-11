@@ -24,6 +24,8 @@ import {
 import Tooltip from '@mui/material/Tooltip';
 import GroupsIcon from '@mui/icons-material/Groups';
 
+import Swal from 'sweetalert2';
+
 import { Button } from '@mui/material';
 
 import { PieChart } from '@mui/x-charts';
@@ -74,17 +76,34 @@ const EmployeeList = () => {
     
     
     const deleteEmployee = async (employeeID) => {
-        confirm(`Are you sure you want to delete`);
-            try {
-            await deleteDoc(doc(db, 'employees', employeeID));
-            // Filter out the deleted employee from the state
-            const updatedList = employeeList.filter((employee) => employee.employee_id !== employeeID);
-            setEmployeeList(updatedList);
-            
-            } catch (error) {
-            console.error('Error deleting document: ', error);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await deleteDoc(doc(db, 'employees', employeeID));
+                    // Filter out the deleted employee from the state
+                    const updatedList = employeeList.filter((employee) => employee.employee_id !== employeeID);
+                    setEmployeeList(updatedList);
+    
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "The employee has been deleted.",
+                        icon: "success"
+                    });
+                } catch (error) {
+                    console.error('Error deleting document: ', error);
+                }
             }
-        };
+        });
+    };
+    
 
     const filteredEmployees = employeeList.filter((employee) => {
         const searchText = filterText.toLowerCase();
@@ -283,7 +302,7 @@ const EmployeeList = () => {
                 
             
         {employeeList.length > 0 ? (
-        filteredEmployees.map((employee) => (
+        filteredEmployees.map((employee) =>(
         <Modal 
             key={employee.employee_id}
             open={openModals[employee.employee_id] || false}
@@ -305,245 +324,248 @@ const EmployeeList = () => {
                 boxShadow: 24,
                 p: 4,
                 }}>
-                {editableEmployee && (
-                                <div>
-                                    {isEditMode ? (
-                                        /* Display editable fields in edit mode */
-                                        <div>
-                                            <Typography variant="h4" component="h4" sx={{ color:'teal'}}>
-                                                <strong>Edit Employee</strong> 
-                                            </Typography>
-                                            <hr />
+                {editableEmployee &&
+                (
+                    <div>
+                    {isEditMode ? (
+                        /* Display editable fields in edit mode */
+                        <div>
+                            <Typography variant="h4" component="h4" sx={{ color:'teal'}}>
+                                <strong>Edit Employee</strong> 
+                            </Typography>
+                            <hr />
 
-                                            <Box component="form" noValidate  sx={{ mt: 3 }}>
-                                                <Grid container spacing={2}>
-                                                <Grid item xs={12} sm={6}>
-                                                <TextField
-                                                name="firstname"
-                                                required
-                                                fullWidth
-                                                id="firstname"
-                                                label="First Name"
-                                                variant='outlined'
-                                                autoFocus
-                                                size="medium"
-                                                value={editableEmployee.firstname}
-                                                        onChange={(e) => setEditableEmployee({ ...editableEmployee, firstname: e.target.value })}
-                                                        sx={{ mb: 2 }}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12} sm={6}>
-                                                <TextField
-                                                required
-                                                fullWidth
-                                                id="lastname"
-                                                label="Last Name"
-                                                name="lastname"
-                                                variant='outlined'
-                                                size="medium"
-                                                value={editableEmployee.lastname}
-                                                        onChange={(e) => setEditableEmployee({ ...editableEmployee, lastname: e.target.value })}
-                                                        sx={{ mb: 2 }}
-                                                />
-                                            </Grid>
+                            <Box component="form" noValidate  sx={{ mt: 3 }}>
+                                <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                <TextField
+                                name="firstname"
+                                required
+                                fullWidth
+                                id="firstname"
+                                label="First Name"
+                                variant='outlined'
+                                autoFocus
+                                size="medium"
+                                value={editableEmployee.firstname}
+                                        onChange={(e) => setEditableEmployee({ ...editableEmployee, firstname: e.target.value })}
+                                        sx={{ mb: 2 }}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                required
+                                fullWidth
+                                id="lastname"
+                                label="Last Name"
+                                name="lastname"
+                                variant='outlined'
+                                size="medium"
+                                value={editableEmployee.lastname}
+                                        onChange={(e) => setEditableEmployee({ ...editableEmployee, lastname: e.target.value })}
+                                        sx={{ mb: 2 }}
+                                />
+                            </Grid>
 
-                                            
-                                            <Grid item xs={12} >
-                                                <TextField
-                                                label="Address"
-                                                value={editableEmployee.address}
-                                                onChange={(e) => setEditableEmployee({ ...editableEmployee, address: e.target.value })}
-                                                variant="outlined"
-                                                size='medium'
-                                                fullWidth
-                                                sx={{ mb: 2 }}
-                                            />
-                                            </Grid>
-                                            <Grid item xs={12} sm={6}>
-                                            <TextField
-                                            required
-                                            fullWidth
-                                            name="contact"
-                                            label="Contact"
-                                            type="number"
-                                            id="contact"
-                                            variant='outlined'
-                                            size="medium"
-                                            sx={{ mb: 2 }}
-                                            value={editableEmployee.contact}
-                                            onChange={(e) => setEditableEmployee({ ...editableEmployee, contact: e.target.value })}
-                                            inputProps={{
-                                                min: 0,
-                                            }}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <FormControl fullWidth>
-                                            <InputLabel id="gender">Gender*</InputLabel>
-                                                <Select
-                                                
-                                                required
-                                                fullWidth
-                                                name="gender"
-                                                type="gender"
-                                                labelId="gender"
-                                                id="gender"
-                                                variant='outlined'
-                                                size="medium"
-                                                label="Gender"
-                                                onChange={(e) => setEditableEmployee({ ...editableEmployee, gender: e.target.value })}
-                                                value={editableEmployee.gender}
-                                                sx={{ mb: 2 }}
-                                                
-                                                >
-                                                    <MenuItem value={'Male'}>Male</MenuItem>
-                                                    <MenuItem value={'Female'}>Female</MenuItem>
-                                                    <MenuItem value={'Other'}>Other</MenuItem>
-                                                </Select>
-                                                </FormControl>
-                                            </Grid>
+                            
+                            <Grid item xs={12} >
+                                <TextField
+                                label="Address"
+                                value={editableEmployee.address}
+                                onChange={(e) => setEditableEmployee({ ...editableEmployee, address: e.target.value })}
+                                variant="outlined"
+                                size='medium'
+                                fullWidth
+                                sx={{ mb: 2 }}
+                            />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                            <TextField
+                            required
+                            fullWidth
+                            name="contact"
+                            label="Contact"
+                            type="number"
+                            id="contact"
+                            variant='outlined'
+                            size="medium"
+                            sx={{ mb: 2 }}
+                            value={editableEmployee.contact}
+                            onChange={(e) => setEditableEmployee({ ...editableEmployee, contact: e.target.value })}
+                            inputProps={{
+                                min: 0,
+                            }}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth>
+                            <InputLabel id="gender">Gender*</InputLabel>
+                                <Select
+                                
+                                required
+                                fullWidth
+                                name="gender"
+                                type="gender"
+                                labelId="gender"
+                                id="gender"
+                                variant='outlined'
+                                size="medium"
+                                label="Gender"
+                                onChange={(e) => setEditableEmployee({ ...editableEmployee, gender: e.target.value })}
+                                value={editableEmployee.gender}
+                                sx={{ mb: 2 }}
+                                
+                                >
+                                    <MenuItem value={'Male'}>Male</MenuItem>
+                                    <MenuItem value={'Female'}>Female</MenuItem>
+                                    <MenuItem value={'Other'}>Other</MenuItem>
+                                </Select>
+                                </FormControl>
+                            </Grid>
 
-                                            <Grid item xs={12}>
-                                            <TextField
-                                            required
-                                            fullWidth 
-                                            id="email"
-                                            label="Email"
-                                            name="email"
-                                            variant='outlined'
-                                            size="medium"
-                                            value={editableEmployee.email}
-                                            onChange={(e) => setEditableEmployee({ ...editableEmployee, email: e.target.value })}
-                                            sx={{ mb: 2 }}
-                                            />
-                                        </Grid>
+                            <Grid item xs={12}>
+                            <TextField
+                            required
+                            fullWidth 
+                            id="email"
+                            label="Email"
+                            name="email"
+                            variant='outlined'
+                            size="medium"
+                            value={editableEmployee.email}
+                            onChange={(e) => setEditableEmployee({ ...editableEmployee, email: e.target.value })}
+                            sx={{ mb: 2 }}
+                            />
+                        </Grid>
 
-                                            <Grid item xs={12}>
-                                                <FormControl fullWidth >
-                                                    <InputLabel id="position">Position*</InputLabel>
-                                                    <Select
-                                                        required
-                                                        fullWidth
-                                                        name="position"
-                                                        type="position"
-                                                        labelId="position"
-                                                        id="position"
-                                                        variant='outlined'
-                                                        label="Position"
-                                                        onChange={(e) => setEditableEmployee({ ...editableEmployee, position: e.target.value })}
-                                                        value={editableEmployee.position}
-                                                        sx={{ mb: 2 }}
-                                                                    
-                                                    >
-                                                        <MenuItem value={'Project Manager'}>Project Manager</MenuItem>
-                                                        <MenuItem value={'Software Engineer'}>Software Engineer</MenuItem>
-                                                        <MenuItem value={'UI/UX Designer'}>UI/UX Designer</MenuItem>
-                                                        <MenuItem value={'Front End Developer'}>Front End Developer</MenuItem>
-                                                        <MenuItem value={'Back End Developer'}>Back End Developer</MenuItem>
-                                                    </Select>
-                                                </FormControl>
-                                            </Grid>
+                            <Grid item xs={12}>
+                                <FormControl fullWidth >
+                                    <InputLabel id="position">Position*</InputLabel>
+                                    <Select
+                                        required
+                                        fullWidth
+                                        name="position"
+                                        type="position"
+                                        labelId="position"
+                                        id="position"
+                                        variant='outlined'
+                                        label="Position"
+                                        onChange={(e) => setEditableEmployee({ ...editableEmployee, position: e.target.value })}
+                                        value={editableEmployee.position}
+                                        sx={{ mb: 2 }}
+                                                    
+                                    >
+                                        <MenuItem value={'Project Manager'}>Project Manager</MenuItem>
+                                        <MenuItem value={'Software Engineer'}>Software Engineer</MenuItem>
+                                        <MenuItem value={'UI/UX Designer'}>UI/UX Designer</MenuItem>
+                                        <MenuItem value={'Front End Developer'}>Front End Developer</MenuItem>
+                                        <MenuItem value={'Back End Developer'}>Back End Developer</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Grid>
 
-                                            <Grid  item xs={12}>
-                                                <TextField
-                                                    label="Hire Date"
-                                                    value={editableEmployee.hiredate}
-                                                    onChange={(e) => setEditableEmployee({ ...editableEmployee, hiredate: e.target.value })}
-                                                    variant="outlined"
-                                                    fullWidth
-                                                    type="date"
-                                                    sx={{ mb: 2 }}
-                                                />
-                                            </Grid>
-                                            
+                            <Grid  item xs={12}>
+                                <TextField
+                                    label="Hire Date"
+                                    value={editableEmployee.hiredate}
+                                    onChange={(e) => setEditableEmployee({ ...editableEmployee, hiredate: e.target.value })}
+                                    variant="outlined"
+                                    fullWidth
+                                    type="date"
+                                    sx={{ mb: 2 }}
+                                />
+                            </Grid>
+                            
 
-                                                </Grid>
-                                            </Box>
-                                            
-                                            
+                                </Grid>
+                            </Box>
+                            
+                            
 
-                                            
-                                        </div>
-                                    ) : (
-                                        /* Display non-editable fields in view mode */
-                                        <Box >
-                                            <Typography variant="h4" component="h4"  sx={{ color:'teal'}}>
-                                                <strong >Employee Information</strong> 
-                                            </Typography>
-                                            <hr />
-                                            <Typography variant="body1  ">
-                                                <strong>First name:</strong> {editableEmployee.firstname}
-                                            </Typography>
-                                            <Typography variant="body1">
-                                                <strong>Last name:</strong> {editableEmployee.lastname}
-                                            </Typography>
-                                            <Typography variant="body1">
-                                                <strong>Address:</strong> {editableEmployee.address}
-                                            </Typography>
-                                            <Typography variant="body1">
-                                                <strong>Contact:</strong> {editableEmployee.contact}
-                                            </Typography>
-                                            <Typography variant="body1">
-                                                <strong>Gender:</strong> {editableEmployee.gender}
-                                            </Typography>
-                                            <Typography variant="body1">
-                                                <strong>Email:</strong> {editableEmployee.email}
-                                            </Typography>
-                                            <Typography variant="body1">
-                                                <strong>Position:</strong> {editableEmployee.position}
-                                            </Typography>
-                                            <Typography variant="body1">
-                                                <strong>Hire Date:</strong> {editableEmployee.hiredate}
-                                            </Typography>
-                                        </Box>
-                                    )}
-                                    <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
-                                        {isEditMode ? (
-                                            /* Show Save button in edit mode */
-                                            <Button
-                                                variant="contained"
-                                                onClick={handleSaveEmployee}
-                                                sx={{
-                                                    marginLeft: '10px', 
-                                                    height: '100%',
-                                                    backgroundColor: 'black',
-                                                    color: 'white',
-                                                    transition: 'background-color 0.3s',
-                                                    '&:hover': {
-                                                        backgroundColor: 'teal',
-                                                    },
-                                                }} >
-                                                Save
-                                            </Button>
-                                        ) : (
-                                            /* Show Edit button in view mode */
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={handleEditEmployee}
-                                                sx={{
-                                                    marginLeft: '10px', 
-                                                    height: '100%',
-                                                    backgroundColor: 'black',
-                                                    color: 'white',
-                                                    transition: 'background-color 0.3s',
-                                                    '&:hover': {
-                                                        backgroundColor: 'teal',
-                                                    },
-                                                }} >
-                                            
-                                                Edit
-                                            </Button>
-                                        )}
-                                    </Box>
-                                </div>
-                            )}
+                            
+                        </div>
+                    ) : (
+                        /* Display non-editable fields in view mode */
+                        <Box >
+                            <Typography variant="h4" component="h4"  sx={{ color:'teal'}}>
+                                <strong >Employee Information</strong> 
+                            </Typography>
+                            <hr />
+                            <Typography variant="body1  ">
+                                <strong>First name:</strong> {editableEmployee.firstname}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Last name:</strong> {editableEmployee.lastname}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Address:</strong> {editableEmployee.address}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Contact:</strong> {editableEmployee.contact}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Gender:</strong> {editableEmployee.gender}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Email:</strong> {editableEmployee.email}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Position:</strong> {editableEmployee.position}
+                            </Typography>
+                            <Typography variant="body1">
+                                <strong>Hire Date:</strong> {editableEmployee.hiredate}
+                            </Typography>
                         </Box>
-                    </Modal>
-                ))
-            ) : (
-                <Typography >No employees available</Typography>
-            )}
+                    )}
+                    <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+                        {isEditMode ? (
+                            /* Show Save button in edit mode */
+                            <Button
+                                variant="contained"
+                                onClick={handleSaveEmployee}
+                                sx={{
+                                    marginLeft: '10px', 
+                                    height: '100%',
+                                    backgroundColor: 'black',
+                                    color: 'white',
+                                    transition: 'background-color 0.3s',
+                                    '&:hover': {
+                                        backgroundColor: 'teal',
+                                    },
+                                }} >
+                                Save
+                            </Button>
+                        ) : (
+                            /* Show Edit button in view mode */
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleEditEmployee}
+                                sx={{
+                                    marginLeft: '10px', 
+                                    height: '100%',
+                                    backgroundColor: 'black',
+                                    color: 'white',
+                                    transition: 'background-color 0.3s',
+                                    '&:hover': {
+                                        backgroundColor: 'teal',
+                                    },
+                                }} >
+                            
+                                Edit
+                            </Button>
+                        )}
+                    </Box>
+                </div>
+                            )}
+            </Box>
+        </Modal>
+        ))
+        )
+        : 
+        (
+        <Typography >No employees available</Typography>
+        )}
         </div>
     );
 };

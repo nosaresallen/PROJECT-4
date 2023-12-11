@@ -11,6 +11,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 import { useEffect, useState } from 'react';
 
+import Swal from 'sweetalert2';
+
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -75,39 +77,57 @@ export default function AddEmployee() {
 
     // ======================================= ADD DATA TO FIRESTORE=======================================
     const addEmployee = () => {
-        
-        // if(employee.firstname === '' || employee.lastname === '' || employee.grade === '')
-        if(
-            employee.firstname !== '' && 
-            employee.lastname !== '' && 
-            employee.address !== '' && 
-            employee.contact !== '' && 
+        if (
+            employee.firstname !== '' &&
+            employee.lastname !== '' &&
+            employee.address !== '' &&
+            employee.contact !== '' &&
             employee.gender !== '' &&
             employee.email !== '' &&
             employee.position !== '' &&
-            employee.hiredate !== '' 
-        ){
-            setEmployeeList(
-                employeeList => [
-                    ...employeeList, employee
-                ]);
-            addDoc(collection(db, 'employees'),employee);
-        }else {
-            alert('Please fill out all fields');
+            employee.hiredate !== ''
+        ) {
+            addDoc(collection(db, 'employees'), employee)
+                .then(() => {
+                    setEmployeeList([...employeeList, employee]);
+    
+                    Swal.fire({
+                        icon: "success",
+                        title: "Added successfully",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+    
+                    setEmployee({
+                        firstname: '',
+                        lastname: '',
+                        address: '',
+                        contact: '',
+                        gender: '',
+                        email: '',
+                        position: '',
+                        hiredate: '',
+                    });
+                    setOpen(true);
+                })
+                .catch(() => {
+                    Swal.fire({
+                        title: "Registration Failed!",
+                        text: "Please input correct credentials.",
+                        icon: "error",
+                        confirmButtonColor: "black"
+                    });
+                });
+        } else {
+            Swal.fire({
+                title: "Adding Failed!",
+                text: "Please fill out all the fields.",
+                icon: "warning",
+                confirmButtonColor: "black"
+            });
         }
-        
-        setEmployee({
-            firstname: '',
-            lastname: '', 
-            address: '',
-            contact: '',
-            gender: '',
-            email: '',
-            position: '',
-            hiredate: '',
-        });
-        setOpen(true);
-    }
+    };
+    
 
     return (
         <ThemeProvider theme={defaultTheme}>
