@@ -92,10 +92,11 @@ export default function AddEmployee() {
                     setEmployeeList([...employeeList, employee]);
     
                     Swal.fire({
+                        toast: true,
                         icon: "success",
                         title: "Added successfully",
                         showConfirmButton: false,
-                        timer: 1500
+                        timer: 2500
                     });
     
                     setEmployee({
@@ -112,6 +113,7 @@ export default function AddEmployee() {
                 })
                 .catch(() => {
                     Swal.fire({
+                        toast: true,
                         title: "Registration Failed!",
                         text: "Please input correct credentials.",
                         icon: "error",
@@ -120,8 +122,8 @@ export default function AddEmployee() {
                 });
         } else {
             Swal.fire({
-                title: "Adding Failed!",
-                text: "Please fill out all the fields.",
+                toast: true,
+                title: "Please fill out all the fields.",
                 icon: "warning",
                 confirmButtonColor: "black"
             });

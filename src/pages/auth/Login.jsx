@@ -40,26 +40,34 @@ function Login() {
             signInWithEmailAndPassword(auth, email, password)
                 .then(() => {
                     Swal.fire({
+                        toast: true,
                         title: "Login Successfully!",
                         icon: "success",
-                        confirmButtonColor: "black"
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        
                     });
                     navigate('/')
                 })
                 .catch(() => {
                     Swal.fire({
+                        toast: true,
                         title: "Login Failed!",
                         text: "Invalid email or password.",
                         icon: "error",
-                        confirmButtonColor: "black"
+                        confirmButtonColor: "#000000"
                     });
                 });
         } else {
             Swal.fire({
-                title: "Try Again!",
-                text: "Please fill out the fields.",
+                toast: true,
+                title: "Please fill out the fields.",
                 icon: "warning",
-                confirmButtonColor: "black"
+                confirmButtonColor: "black",
+                customClass: {
+                    confirmButton: 'swal-confirm-right' // Adding a custom class for the button
+                },
             });
         }
 

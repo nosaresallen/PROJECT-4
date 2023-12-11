@@ -58,16 +58,18 @@ export default function Registration() {
                 })
                 .catch(() => {
                     Swal.fire({
+                        toast: true,
                         title: "Registration Failed!",
-                        text: "Please input correct credentials.",
+                        text: "Invalid credentials.",
                         icon: "error",
                         confirmButtonColor: "black"
                     });
                 });
         }else{
             Swal.fire({
+                toast: true,
                 title: "Registration Failed!",
-                text: "Please fill out all the fields.",
+                text: "Please input correct credentials.",
                 icon: "warning",
                 confirmButtonColor: "black"
             });

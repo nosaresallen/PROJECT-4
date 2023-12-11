@@ -130,8 +130,8 @@ function Layout() {
 
     const handleLogout = () => {
         Swal.fire({
-            title: 'Logout',
-            text: 'Are you sure you want to logout?',
+            toast: true,
+            title: 'Are you sure you want to logout?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#008080',
@@ -143,10 +143,12 @@ function Layout() {
                 signOut(auth)
                     .then(() => {
                         Swal.fire({
-                            title: 'Logged Out',
-                            text: 'You have been logged out successfully.',
+                            toast: true,
+                            title: 'Logged out successfully.',
                             icon: 'success',
-                            confirmButtonColor: 'black'
+                            showConfirmButton: false,
+                            timer: 1500,
+                            timerProgressBar: true,
                         });
                         navigate('/login');
                     })

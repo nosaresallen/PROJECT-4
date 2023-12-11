@@ -77,6 +77,7 @@ const EmployeeList = () => {
     
     const deleteEmployee = async (employeeID) => {
         Swal.fire({
+            toast: true,
             title: "Are you sure?",
             text: "You won't be able to revert this!",
             icon: "warning",
@@ -93,9 +94,12 @@ const EmployeeList = () => {
                     setEmployeeList(updatedList);
     
                     Swal.fire({
+                        toast: true,
                         title: "Deleted!",
-                        text: "The employee has been deleted.",
-                        icon: "success"
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 1500,
+                        timerProgressBar: true,
                     });
                 } catch (error) {
                     console.error('Error deleting document: ', error);
