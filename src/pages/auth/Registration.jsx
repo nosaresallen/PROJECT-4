@@ -34,6 +34,15 @@ export default function Registration() {
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                Swal.fire({
+                    toast: true,
+                    title: "Registration Successful!",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    
+                });
                 navigate('/');
             }
         });
@@ -68,8 +77,7 @@ export default function Registration() {
         }else{
             Swal.fire({
                 toast: true,
-                title: "Registration Failed!",
-                text: "Please input correct credentials.",
+                title: "Please input correct credentials",
                 icon: "warning",
                 confirmButtonColor: "black"
             });

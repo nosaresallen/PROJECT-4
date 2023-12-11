@@ -78,8 +78,7 @@ const EmployeeList = () => {
     const deleteEmployee = async (employeeID) => {
         Swal.fire({
             toast: true,
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
+            title: "Are you sure you want to delete this employee?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: '#008080',
@@ -95,7 +94,7 @@ const EmployeeList = () => {
     
                     Swal.fire({
                         toast: true,
-                        title: "Deleted!",
+                        title: "Deleted successfully!",
                         icon: "success",
                         showConfirmButton: false,
                         timer: 1500,

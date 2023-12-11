@@ -41,7 +41,7 @@ function Login() {
                 .then(() => {
                     Swal.fire({
                         toast: true,
-                        title: "Login Successfully!",
+                        title: "Login successful!",
                         icon: "success",
                         showConfirmButton: false,
                         timer: 2000,
