@@ -122,6 +122,9 @@ const EmployeeList = () => {
             position.startsWith(searchText)
             );
         });
+    
+    //Sorting by their name from A to Z
+    const sortedEmployees = filteredEmployees.slice().sort((a, b) => a.firstname.localeCompare(b.firstname, 'en', { sensitivity: 'base' }));
 
         // Calculate position distribution for the pie chart
     const calculatePositionDistribution = () => {
@@ -262,13 +265,13 @@ const EmployeeList = () => {
             </TableRow>
             </TableHead>
             <TableBody>
-            {filterText && filteredEmployees.length === 0 && (
+            {filterText && sortedEmployees.length === 0 && (
                 <TableRow>
                     <TableCell colSpan={8}>Employee not found</TableCell>
                 </TableRow>
             )}
                 {employeeList.length > 0 ? (
-                filteredEmployees.map((employee) => (
+                sortedEmployees.map((employee) => (
                     <TableRow key={employee.employee_id}>
                         <TableCell style={{ textAlign: 'center' }}>{employee.firstname}</TableCell>
                         <TableCell style={{ textAlign: 'center' }}>{employee.lastname}</TableCell>
@@ -308,7 +311,7 @@ const EmployeeList = () => {
                 
             
         {employeeList.length > 0 ? (
-        filteredEmployees.map((employee) =>(
+        sortedEmployees.map((employee) =>(
         <Modal 
             key={employee.employee_id}
             open={openModals[employee.employee_id] || false}
@@ -352,7 +355,7 @@ const EmployeeList = () => {
                                 label="First Name"
                                 variant='outlined'
                                 autoFocus
-                                size="medium"
+                                size="small"
                                 value={editableEmployee.firstname}
                                         onChange={(e) => setEditableEmployee({ ...editableEmployee, firstname: e.target.value })}
                                         sx={{ mb: 2 }}
@@ -366,7 +369,7 @@ const EmployeeList = () => {
                                 label="Last Name"
                                 name="lastname"
                                 variant='outlined'
-                                size="medium"
+                                size="small"
                                 value={editableEmployee.lastname}
                                         onChange={(e) => setEditableEmployee({ ...editableEmployee, lastname: e.target.value })}
                                         sx={{ mb: 2 }}
@@ -380,7 +383,7 @@ const EmployeeList = () => {
                                 value={editableEmployee.address}
                                 onChange={(e) => setEditableEmployee({ ...editableEmployee, address: e.target.value })}
                                 variant="outlined"
-                                size='medium'
+                                size='small'
                                 fullWidth
                                 sx={{ mb: 2 }}
                             />
@@ -394,7 +397,7 @@ const EmployeeList = () => {
                             type="number"
                             id="contact"
                             variant='outlined'
-                            size="medium"
+                            size="small"
                             sx={{ mb: 2 }}
                             value={editableEmployee.contact}
                             onChange={(e) => setEditableEmployee({ ...editableEmployee, contact: e.target.value })}
@@ -415,7 +418,7 @@ const EmployeeList = () => {
                                 labelId="gender"
                                 id="gender"
                                 variant='outlined'
-                                size="medium"
+                                size="small"
                                 label="Gender"
                                 onChange={(e) => setEditableEmployee({ ...editableEmployee, gender: e.target.value })}
                                 value={editableEmployee.gender}
@@ -437,7 +440,7 @@ const EmployeeList = () => {
                             label="Email"
                             name="email"
                             variant='outlined'
-                            size="medium"
+                            size="small"
                             value={editableEmployee.email}
                             onChange={(e) => setEditableEmployee({ ...editableEmployee, email: e.target.value })}
                             sx={{ mb: 2 }}
@@ -449,6 +452,7 @@ const EmployeeList = () => {
                                     <InputLabel id="position">Position*</InputLabel>
                                     <Select
                                         required
+                                        size='small'
                                         fullWidth
                                         name="position"
                                         type="position"
@@ -478,6 +482,7 @@ const EmployeeList = () => {
                                     variant="outlined"
                                     fullWidth
                                     type="date"
+                                    size='small'
                                     sx={{ mb: 2 }}
                                 />
                             </Grid>
